@@ -1,0 +1,60 @@
+{
+  "id": "gm-zoro",
+  "slug": "zoro",
+  "name": "โซโร (The Dark Lady)",
+  "category": "Hero Skin",
+  "description": "สกินวิชาสามดาบของ Roronoa Zoro สำหรับ The Dark Lady พร้อมท่าฟันฮาคิ พายุมังกรดำ และเสียงพากย์ญี่ปุ่น",
+  "longDescription": "นักดาบแห่งกลุ่มโจรสลัดหมวกฟาง ผู้ใช้วิชาสามดาบ (Santoryu) เคลือบฮาคิเกราะสีดำ ฟันคลื่นดาบระยะไกล พุ่งฟันทะลวงศัตรูด้วยความเร็วเหนือสายตา และปลดปล่อยฮาคิราชันแห่งราชานรก",
+  "comments": "",
+  "accent": "#68c587",
+  "version": "0.4.0",
+  "fileSize": "12.0 MB",
+  "createdAt": "2026-11-23",
+  "updatedAt": "2026-11-23",
+  "featured": false,
+  "concept": false,
+  "thumbnail": "assets/art/zoro/thumb.webp",
+  "heroImage": "assets/art/zoro/cover.webp",
+  "artworkAlt": "โซโรถือดาบบนดาดฟ้าเรือกับกลุ่มโจรสลัดหมวกฟาง",
+  "screenshots": [
+    "assets/art/zoro/cover.webp"
+  ],
+  "screenshotAlts": [
+    "โซโรถือดาบบนดาดฟ้าเรือกับกลุ่มโจรสลัดหมวกฟาง"
+  ],
+  "preview": "",
+  "previewVideoUrl": "",
+  "skills": [
+    {
+      "key": "Q",
+      "name": "เคลือบฮาคิ 3 ดาบ",
+      "description": "เคลือบฮาคิเกราะสีดำม่วงลงบนดาบทั้ง 3 เล่ม (วาโดอิจิมอนจิ, เอนมะ, ซันไดคิเทตสึ) เพิ่มพลังฟันและทำให้ศัตรูติดใบ้เมื่อโจมตี",
+      "icon": "assets/art/zoro/skill-q.webp",
+      "clip": ""
+    },
+    {
+      "key": "W",
+      "name": "วิชา 3 ดาบ: มังกรดำทอร์นาโด",
+      "description": "โซโลหมุนตัวเรียกลมพายุหมุนมังกรดำสีเขียวมรกตโหมกระหน่ำใส่เป้าหมายระยะไกล สร้างความเสียหายและลดความเร็วเคลื่อนที่อย่างรุนแรง",
+      "icon": "assets/art/zoro/skill-w.webp",
+      "clip": ""
+    },
+    {
+      "key": "E",
+      "name": "วิชา 3 ดาบ: โอนิกิริพิภพนรก",
+      "description": "ตั้งท่าไขว้ดาบทั้งสามแล้วพุ่งทะยานฟันศัตรูตามเส้นทางด้วยความเร็วสูงสุด",
+      "icon": "assets/art/zoro/skill-e.webp",
+      "clip": ""
+    },
+    {
+      "key": "R",
+      "name": "ฮาคิราชัน (Haoshoku)",
+      "description": "ระเบิดจิตคุกคามฮาคิราชันสีแดงดำปกคลุมพื้นที่ ปิดกั้นวิสัยทัศน์ของศัตรูทั้งหมดและตัดการมองเห็นร่วมกับเพื่อน",
+      "icon": "assets/art/zoro/skill-r.webp",
+      "clip": ""
+    }
+  ],
+  "downloadUrl": "https://drive.google.com/file/d/1-CRYmeyxL0txWsG32PWTAGrERZ2MldpA/view?usp=sharing",
+  "installationGuide": [],
+  "changelog": []
+}

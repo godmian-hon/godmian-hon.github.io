@@ -73,6 +73,7 @@ export function initializeHero(mods) {
   next.addEventListener('click', () => showSlide(index + 1));
   document.getElementById('hero-total').textContent = String(slides.length).padStart(2, '0');
   previous.parentElement.hidden = slides.length < 2;
+  counter.parentElement.hidden = slides.length < 2;
   controls.hidden = false;
   showSlide(0);
 }

@@ -70,7 +70,8 @@ function renderRoute(initial = false, restore = false) {
     return;
   }
   const target = ['explore', 'about', 'featured', 'main-content'].includes(hash) ? hash : 'home';
-  const section = document.getElementById(target);
+  const destination = document.getElementById(target);
+  const section = destination.hidden ? document.getElementById('explore') : destination;
   const behavior = initial || wasDetail || reducedMotion.matches || searchRequested ? 'instant' : 'smooth';
   if (target === 'home') window.scrollTo({ top: 0, behavior });
   else section.scrollIntoView({ behavior, block: 'start' });

@@ -14,6 +14,8 @@
   text-decoration: none;
 }
 .detail-back:hover { color: var(--text, #f5f5f7); }
+.detail-layout .detail-labels, .detail-notes li::marker { color: var(--scene-color, #99ceda); }
+.detail-layout .detail-title { text-wrap: balance; }
 .detail-header { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); align-items: center; gap: clamp(2rem, 4vw, 4.5rem); }
 .detail-cover {
   display: block;

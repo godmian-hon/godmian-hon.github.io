@@ -1,11 +1,12 @@
 import { modCard } from './ui.js';
 import { animate, revealOnScroll } from './motion.js';
+import { imageButton } from './detail.js';
 
 export function initializeCollection(mods, failed = false) {
   const picks = mods.filter(mod => mod.featured);
   const featured = document.getElementById('featured');
-  featured.hidden = !picks.length;
-  const editorial = picks.length > 1 ? picks.slice(1) : picks;
+  const editorial = picks.slice(1);
+  featured.hidden = !editorial.length;
   document.getElementById('feature-grid').replaceChildren(...editorial.map(mod => modCard(mod, true)));
   if (featured.hidden) document.querySelector('.scroll-cue').href = '#explore';
 
@@ -18,6 +19,11 @@ export function initializeCollection(mods, failed = false) {
   const reset = document.getElementById('reset-filters');
   const names = [...new Set(mods.map(mod => mod.category))].sort((a, b) => a.localeCompare(b));
   names.forEach(name => category.add(new Option(name, name)));
+  category.parentElement.hidden = names.length < 2;
+  order.parentElement.hidden = mods.length < 2;
+  const previewPanel = document.querySelector('.archive-previews');
+  const previewStrip = previewPanel.querySelector('.preview-strip');
+  let shownPreview;
   const cards = new Map(mods.map(mod => [mod, modCard(mod)]));
   let stopReveal;
   let initialized = false;
@@ -42,6 +48,19 @@ export function initializeCollection(mods, failed = false) {
       }
     }
     grid.replaceChildren(...matches.map(mod => cards.get(mod)));
+    const single = matches.length === 1 ? matches[0] : null;
+    if (single !== shownPreview) {
+      shownPreview = single;
+      previewStrip.replaceChildren();
+      if (single) {
+        const cover = cards.get(single).querySelector('.card-visual img');
+        if (cover.getAttribute('src') === single.thumbnail && single.heroImage !== single.thumbnail) cover.src = single.heroImage;
+        single.screenshots.forEach((src, index) => {
+          if (src !== single.heroImage && previewStrip.childElementCount < 3) previewStrip.append(imageButton(single, index));
+        });
+      }
+      previewPanel.hidden = !previewStrip.childElementCount;
+    }
     if (initialized) {
       for (const card of grid.children) {
         const next = card.getBoundingClientRect();

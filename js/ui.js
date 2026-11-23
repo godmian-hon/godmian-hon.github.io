@@ -2,6 +2,13 @@ import { FALLBACK_IMAGE } from './data.js';
 import { followPointer } from './motion.js';
 
 const svgNS = 'http://www.w3.org/2000/svg';
+const formatDay = new Intl.DateTimeFormat('th-TH', {
+  calendar: 'gregory', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC'
+});
+
+export function humanDate(day) {
+  return formatDay.format(new Date(day + 'T00:00:00Z'));
+}
 
 export function icon(name) {
   const svg = document.createElementNS(svgNS, 'svg');
@@ -38,6 +45,7 @@ export function makeImage(src, alt, { eager = false, className = '', width = 720
 
 export function modCard(mod, isEditorial = false) {
   const article = element('article', 'mod-card');
+  article.style.setProperty('--scene-color', mod.accent);
   const link = element('a', 'card-link');
   link.href = '#mod/' + mod.slug;
   link.setAttribute('aria-label', 'ดูรายละเอียด ' + mod.name);
@@ -66,9 +74,17 @@ export function modCard(mod, isEditorial = false) {
   if (mod.version) meta.append(element('span', 'card-version', 'v' + mod.version));
   if (mod.concept) meta.append(element('span', 'concept-note', 'ภาพคอนเซปต์'));
   const title = element('h3', '', mod.name);
+  const subtitle = mod.name.match(/^(.+?)\s+\(([^()]+)\)$/u);
+  if (subtitle) title.replaceChildren(document.createTextNode(subtitle[1] + ' '), element('span', 'card-subtitle', '(' + subtitle[2] + ')'));
   const description = element('p', 'card-description', mod.description);
   const details = element('span', 'card-cta', 'View details');
-  info.append(meta, title, description, details);
+  details.prepend(icon('expand'));
+  const facts = element('p', 'card-facts');
+  if (mod.fileSize) facts.append(element('span', '', mod.fileSize));
+  if (mod.updatedAt) {
+    facts.append(element('span', '', 'อัปเดต ' + humanDate(mod.updatedAt)));
+  }
+  info.append(meta, title, description, facts, details);
   link.append(visual, info);
   article.append(link);
   return article;

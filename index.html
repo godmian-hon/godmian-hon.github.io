@@ -49,7 +49,7 @@
             <p class="hero-description">รวมม็อด Heroes of Newerth ให้คุณสำรวจสกินฮีโร่ เอฟเฟกต์สกิล และธีมแผนที่ในแบบใหม่</p>
             <div class="hero-actions">
               <a href="#explore" class="btn btn-primary"><svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#grid"/></svg>Explore mods</a>
-              <a id="spotlight-link" href="#featured" class="btn btn-secondary"><svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#play"/></svg>View spotlight</a>
+              <a id="spotlight-link" href="#featured" class="btn btn-secondary"><svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#expand"/></svg>View mod</a>
             </div>
           </div>
           <div class="hero-base">
@@ -79,16 +79,22 @@
       </section>
       <section id="explore" class="explore section-space" aria-labelledby="explore-title">
         <div class="wrap">
+          <div class="archive-toolbar">
           <div class="section-heading">
-            <div><p class="eyebrow"><span class="rule"></span>The archive</p><h2 id="explore-title">Explore mods<span class="period">.</span></h2></div>
+            <div><p class="eyebrow"><span class="rule"></span>GodMian Archive</p><h2 id="explore-title">Explore mods<span class="period">.</span></h2></div>
           </div>
           <div class="library-tools">
             <label class="search-field"><span class="sr-only">ค้นหาม็อดตามชื่อ</span><svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#search"/></svg><input type="search" id="mod-search" placeholder="ค้นหาตามชื่อม็อด…" autocomplete="off"></label>
             <label class="select-field"><svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#layers"/></svg><span class="sr-only">กรองตามหมวดหมู่</span><select id="category-filter"><option value="">All categories</option></select><svg class="icon chevron" aria-hidden="true"><use href="./assets/icons.svg#down"/></svg></label>
             <label class="select-field"><svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#sort"/></svg><span class="sr-only">เรียงตามวันที่อัปเดต</span><select id="sort-order"><option value="newest">Recently updated</option><option value="oldest">Oldest updated</option></select><svg class="icon chevron" aria-hidden="true"><use href="./assets/icons.svg#down"/></svg></label>
           </div>
+          </div>
           <p id="result-count" class="result-count" role="status"></p>
           <div class="archive-grid" id="archive-grid"></div>
+          <section class="archive-previews" aria-labelledby="archive-preview-title" hidden>
+            <h3 id="archive-preview-title">Preview gallery</h3>
+            <div class="preview-strip"></div>
+          </section>
           <div id="collection-empty" class="empty-state" hidden>
             <h3 id="empty-title">ไม่พบม็อดที่ตรงกับการค้นหา</h3><p id="empty-description">ลองค้นด้วยชื่ออื่นหรือเลือกดูทุกหมวดหมู่</p>
             <button id="reset-filters" class="btn btn-secondary" type="button">Clear filters</button>

@@ -1,9 +1,6 @@
-import { element, icon, makeImage } from "./ui.js";
+import { element, humanDate, icon, makeImage } from "./ui.js";
 import { enableSwipe, imageSwitcher, revealOnScroll } from "./motion.js";
 
-const formatDay = new Intl.DateTimeFormat("th-TH", {
-  calendar: "gregory", month: "short", day: "numeric", year: "numeric", timeZone: "UTC",
-});
 let openDialog = null;
 let stopReveal;
 
@@ -20,10 +17,6 @@ function control(label, glyph, className = "detail-icon-btn") {
   button.title = label;
   button.append(icon(glyph));
   return button;
-}
-
-function humanDate(day) {
-  return formatDay.format(new Date(day + "T00:00:00Z"));
 }
 
 export function closeLightbox() {
@@ -87,7 +80,7 @@ function openLightbox(mod, startIndex) {
   document.documentElement.classList.add("detail-lightbox-open");
 }
 
-function imageButton(mod, index) {
+export function imageButton(mod, index) {
   const button = element("button", "detail-gallery-image");
   button.type = "button";
   button.setAttribute("aria-label", "ขยายภาพที่ " + (index + 1) + " จาก " + mod.screenshots.length + " ของ " + mod.name);
@@ -155,6 +148,7 @@ function textSection(title) {
 export function renderDetail(mod, container) {
   closeLightbox();
   const article = element("article", "wrap detail-layout");
+  article.style.setProperty("--scene-color", mod.accent);
   const back = element("a", "detail-back", "Back to collection");
   back.href = "#explore";
   back.prepend(icon("left"));

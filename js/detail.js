@@ -192,6 +192,8 @@ export function renderDetail(mod, container) {
       card.append(trigger);
       if (skill.clip) {
         trigger.type = "button";
+        trigger.dataset.video = skill.clip;
+        trigger.dataset.desc = skill.description;
         const panel = element("div", "skill-preview");
         panel.id = mod.slug + "-skill-" + grid.childElementCount;
         panel.hidden = true;
@@ -210,13 +212,9 @@ export function renderDetail(mod, container) {
             panel.replaceChildren();
           }
         };
-        card.addEventListener("pointerenter", event => {
-          if (event.pointerType === "mouse") show(true);
+        trigger.addEventListener("click", event => {
+          if (event.pointerType !== "mouse" || event.detail === 0) show(panel.hidden);
         });
-        card.addEventListener("pointerleave", event => {
-          if (event.pointerType === "mouse") show(false);
-        });
-        trigger.addEventListener("click", () => show(panel.hidden));
         card.addEventListener("focusout", event => {
           if (!card.contains(event.relatedTarget)) show(false);
         });

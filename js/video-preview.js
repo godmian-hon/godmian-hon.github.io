@@ -42,8 +42,8 @@ export function initializeVideoPreview() {
   }
 
   function follow(event) {
-    const item = event.pointerType === 'mouse' && event.target.closest?.('.mod-item[data-video]');
-    if (!item) { hide(); return; }
+    const item = event.pointerType === 'mouse' && event.target.closest?.('.mod-item[data-video], .skill-card[data-video]');
+    if (!item || item.getAttribute('aria-expanded') === 'true') { hide(); return; }
     const entering = active !== item;
     if (entering) {
       clearTimeout(cleanup);

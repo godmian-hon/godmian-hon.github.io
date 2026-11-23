@@ -166,6 +166,34 @@ export function renderDetail(mod, container) {
     comments.append(element("p", "", mod.comments));
     article.append(comments);
   }
+  if (mod.skills.length) {
+    const section = textSection("สกิลฮีโร่");
+    const grid = element("div", "skill-grid");
+    for (const skill of mod.skills) {
+      const card = element("div", "skill-card");
+      const portrait = element("div", "skill-icon");
+      portrait.append(makeImage(skill.icon, "", { width: 100, height: 100 }));
+      if (skill.key) portrait.append(element("kbd", "", skill.key));
+      const copy = element("div");
+      copy.append(element("h3", "", skill.name), element("p", "", skill.description));
+      card.append(portrait, copy);
+      grid.append(card);
+    }
+    section.append(grid);
+    article.append(section);
+  }
+  if (mod.video) {
+    const section = textSection("วิดีโอพรีวิว");
+    const player = element("iframe", "mod-video");
+    const url = new URL(mod.video.view);
+    url.pathname = url.pathname.replace(/\/view$/, "/preview");
+    player.src = url.href;
+    player.title = "วิดีโอพรีวิว " + mod.name;
+    player.loading = "lazy";
+    player.allowFullscreen = true;
+    section.append(player, driveLink("ดูคลิปบน Google Drive", mod.video.view, "detail-drive"));
+    article.append(section);
+  }
   if (mod.screenshots.length) {
     const gallery = textSection("ภาพตัวอย่าง");
     const images = element("div", "detail-gallery");

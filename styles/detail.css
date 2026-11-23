@@ -68,6 +68,14 @@
 .detail-gallery-image img { width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; display: block; transition: transform .25s ease; }
 .detail-enlarge { display: grid; place-items: center; position: absolute; bottom: .7rem; right: .7rem; width: 2rem; height: 2rem; border: 1px solid #ffffff4f; border-radius: .35rem; background: #08090cb0; }
 .detail-notes { gap: clamp(1.5rem, 5vw, 5rem); }
+.skill-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,29rem),1fr)); gap: 14px; }
+.skill-card { display: grid; grid-template-columns: clamp(62px,7vw,96px) 1fr; gap: 18px; align-items: start; padding: clamp(14px,2vw,24px); border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.skill-icon { position: relative; }
+.skill-icon img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 6px; }
+.skill-icon kbd { position: absolute; left: -4px; bottom: -4px; color: var(--scene-color); background: #111820; border: 1px solid var(--line); border-radius: 4px; padding: 2px 7px; font: 600 .85rem var(--mono); }
+.skill-card h3 { font-size: 1.14rem; line-height: 1.45; margin: 0 0 5px; }
+.skill-card p { font-size: .96rem; }
+.mod-video { display: block; width: 100%; aspect-ratio: 16/9; border: 1px solid var(--line); border-radius: 10px; background: #08090c; }
 .detail-text-list { padding-inline-start: 1.45em; margin: 0; }
 .detail-text-list li + li { margin-top: .3rem; }
 .detail-change + .detail-change { margin-top: 1.5rem; }

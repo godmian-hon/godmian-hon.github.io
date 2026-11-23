@@ -58,6 +58,33 @@
       }
     ],
     "createdAt": "2026-11-19",
-    "updatedAt": "2026-11-23"
+    "updatedAt": "2026-11-23",
+    "skills": [
+      {
+        "key": "Q",
+        "name": "ปาการ์ดจอระเบิดไฟฟ้า",
+        "icon": "./assets/art/rachatoey-skill_q.webp",
+        "description": "ตั้งท่าพิชเชอร์เบสบอลเงื้อขว้างการ์ดจอ RTX 3080 Ti โอเวอร์คล็อกพุ่งไปตกกระแทกพื้น ระเบิดกระแสไฟฟ้าแรงสูง ลดความเร็ว และเปิดทัศนวิสัยรอบพื้นที่"
+      },
+      {
+        "key": "W",
+        "name": "ดีดนิ้วสายฟ้า",
+        "icon": "./assets/art/rachatoey-skill_w.webp",
+        "description": "ชาร์จไฟฟ้าสถิตไว้ที่ปลายนิ้ว ทำให้การยิงมีโอกาสสร้างดาเมจเสริมและสตันศัตรูชั่วพริบตา"
+      },
+      {
+        "key": "E",
+        "name": "แว่นสไนเปอร์ล็อกเป้า",
+        "icon": "./assets/art/rachatoey-skill_e.webp",
+        "description": "ปรับโฟกัสผ่านแว่นตา เพิ่มระยะยิงจากปลายนิ้ว ระยะมองเห็น และมอบโอกาส True Strike ให้พันธมิตรรอบตัว"
+      },
+      {
+        "key": "R",
+        "name": "ปารองเท้าแตะปลิดชีพ",
+        "icon": "./assets/art/rachatoey-skill_r.webp",
+        "description": "ก้มลงหยิบรองเท้าแตะ Havaianas เงื้อสุดแขนแล้วปาควงสว่านด้วยความเร็วเหนือเสียงข้ามแผนที่ฟาดหน้าศัตรู"
+      }
+    ],
+    "previewVideoUrl": "https://drive.google.com/file/d/1N8yiddXZvgC7RXUSVA9GmTF0F5ZdvmKT/view?usp=sharing"
   }
 ]

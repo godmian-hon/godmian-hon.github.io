@@ -95,6 +95,10 @@ export function normalizeMods(records) {
       accent: /^#[0-9a-f]{6}$/i.test(text(record.accent)) ? record.accent : "#97caff",
       description: text(record.description), longDescription: text(record.longDescription),
       comments: text(record.comments),
+      skills: (Array.isArray(record.skills) ? record.skills : []).filter(skill => skill && text(skill.name)).map(skill => ({
+        key: text(skill.key), name: text(skill.name), icon: imagePath(skill.icon), description: text(skill.description)
+      })),
+      video: getDriveLinks(record.previewVideoUrl),
       featured: record.featured === true, concept: record.concept === true,
       createdAt, updatedAt: isoDate(record.updatedAt) || createdAt,
       fileSize: text(record.fileSize), downloadUrl: driveLinks ? downloadUrl : "", driveLinks,

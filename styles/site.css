@@ -342,3 +342,7 @@ section[id], #main-content { scroll-margin-top: var(--header-height); }
 .cursor-preview video { display: block; width: 100%; aspect-ratio: 2.39; object-fit: contain; background: #090909; }
 .cursor-preview p { margin: 12px 15px; font-size: .9rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .cursor-preview { transition: none; } }
+
+.cursor-preview strong:not([hidden]) { display: block; margin: 12px 15px 0; color: #ffe0aa; }
+.cursor-preview strong:not([hidden]) + p { display: block; margin-top: 4px; }
+.cursor-preview video[hidden] { display: none; }

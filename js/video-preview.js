@@ -4,8 +4,9 @@ export function initializeVideoPreview() {
   card.setAttribute('aria-hidden', 'true');
   const video = document.createElement('video');
   video.autoplay = video.loop = video.playsInline = video.defaultMuted = video.muted = true;
+  const title = document.createElement('strong');
   const description = document.createElement('p');
-  card.append(video, description);
+  card.append(video, title, description);
   document.body.append(card);
 
   let active = null;
@@ -42,15 +43,23 @@ export function initializeVideoPreview() {
   }
 
   function follow(event) {
-    const item = event.pointerType === 'mouse' && event.target.closest?.('.mod-item[data-video], .skill-card[data-video]');
+    const item = event.pointerType === 'mouse' && event.target.closest?.('.mod-item[data-video], .skill-card[data-title]');
     if (!item || item.getAttribute('aria-expanded') === 'true') { hide(); return; }
     const entering = active !== item;
     if (entering) {
       clearTimeout(cleanup);
       active = item;
+      title.textContent = item.dataset.title || '';
+      title.hidden = !title.textContent;
       description.textContent = item.dataset.desc || '';
-      video.src = item.dataset.video;
-      video.play().catch(() => {});
+      video.hidden = !item.dataset.video;
+      if (item.dataset.video) {
+        video.src = item.dataset.video;
+        video.play().catch(() => {});
+      } else {
+        video.removeAttribute('src');
+        video.load();
+      }
       card.classList.add('visible');
     }
     targetX = position(event.clientX, card.offsetWidth, document.documentElement.clientWidth);

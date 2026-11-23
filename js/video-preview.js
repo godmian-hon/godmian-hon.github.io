@@ -11,6 +11,7 @@ export function initializeVideoPreview() {
 
   let active = null;
   let cleanup;
+  let pointerX, pointerY;
   let frame;
   let x, y, targetX, targetY;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -45,6 +46,8 @@ export function initializeVideoPreview() {
   function follow(event) {
     const item = event.pointerType === 'mouse' && event.target.closest?.('.mod-item[data-video], .skill-card[data-title]');
     if (!item || item.getAttribute('aria-expanded') === 'true') { hide(); return; }
+    pointerX = event.clientX;
+    pointerY = event.clientY;
     const entering = active !== item;
     if (entering) {
       clearTimeout(cleanup);
@@ -73,6 +76,9 @@ export function initializeVideoPreview() {
   document.addEventListener('pointerout', event => {
     if (active && !active.contains(event.relatedTarget)) hide();
   });
-  for (const event of ['resize', 'blur', 'hashchange', 'pagehide', 'scroll']) window.addEventListener(event, hide);
+  for (const event of ['resize', 'blur', 'hashchange', 'pagehide']) window.addEventListener(event, hide);
+  window.addEventListener('scroll', () => {
+    if (active && !active.contains(document.elementFromPoint(pointerX, pointerY))) hide();
+  }, { passive: true });
   document.addEventListener('visibilitychange', hide);
 }

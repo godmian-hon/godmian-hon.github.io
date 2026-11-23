@@ -50,6 +50,13 @@ export function getDriveLinks(value) {
   return { download: download.href, view: view.href };
 }
 
+export function skillClipPath(value) {
+  const links = getDriveLinks(value);
+  if (!links) return videoPath(value);
+  const id = new URL(links.download).searchParams.get("id");
+  return "./assets/video/drive-" + id + ".mp4";
+}
+
 export function normalizeMods(records) {
   if (!Array.isArray(records)) throw new TypeError("The mod catalogue must be an array.");
   const ids = new Set();
@@ -98,7 +105,7 @@ export function normalizeMods(records) {
       description: text(record.description), longDescription: text(record.longDescription),
       comments: text(record.comments),
       skills: (Array.isArray(record.skills) ? record.skills : []).filter(skill => skill && text(skill.name)).map(skill => ({
-        key: text(skill.key), name: text(skill.name), icon: imagePath(skill.icon), clip: videoPath(skill.clip), description: text(skill.description)
+        key: text(skill.key), name: text(skill.name), icon: imagePath(skill.icon), clip: skillClipPath(skill.clip), description: text(skill.description)
       })),
       preview: videoPath(record.preview), video: getDriveLinks(record.previewVideoUrl),
       featured: record.featured === true, concept: record.concept === true,

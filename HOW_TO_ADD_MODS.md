@@ -57,3 +57,13 @@
 ## อัปเดตรายการเดิม
 
 คง `id` และ `slug` ไว้ แก้ข้อมูลเฉพาะส่วนที่เปลี่ยน เมื่อลงรุ่นใหม่ให้อัปเดต `version`, `updatedAt`, `fileSize` และ `downloadUrl` พร้อมเพิ่มประวัติที่ต้น `changelog` ตั้ง `featured` ของผลงานที่ต้องการแนะนำเป็น `true` แล้วตรวจหน้าแรกและผลลัพธ์ในคลังอีกครั้ง
+
+## คลิปสกิลจาก Google Drive
+
+ตั้งสิทธิ์ไฟล์ MP4 เป็น **Anyone with the link · Viewer** และเปิดให้ดาวน์โหลด แล้วใส่ลิงก์แชร์ของคลิปนั้นใน `skills[].clip` ของตัวละคร เช่น
+
+```json
+"clip": "https://drive.google.com/file/d/FILE_ID/view?usp=sharing"
+```
+
+ก่อน push รัน `node scripts/sync-skill-clips.mjs` ด้วย Node.js 22 ขึ้นไป แล้ว commit ไฟล์ MP4 ที่สร้างใน `assets/video/` พร้อม JSON โปรแกรมข้ามคลิปที่มีอยู่แล้ว ถ้าเปลี่ยนเนื้อหาที่ Drive โดยใช้ลิงก์เดิม ให้รัน `node scripts/sync-skill-clips.mjs --refresh` หน้าเว็บจะเล่นสำเนานี้เมื่อชี้หรือแตะสกิล พาธ MP4 ภายในเว็บยังใช้ในช่องเดียวกันได้

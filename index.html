@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08090c">
+  <meta name="description" content="เกรียนมอด คลังม็อด Heroes of Newerth สำหรับผู้เล่นไทย รวมสกินฮีโร่ เอฟเฟกต์สกิล และธีมแผนที่">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="GodMian · เกรียนมอด | Heroes of Newerth">
+  <meta property="og:description" content="ชมภาพตัวอย่างและดาวน์โหลดม็อด Heroes of Newerth จากชุมชนแฟนเกม">
+  <meta property="og:image" content="./assets/art/frostbound.webp">
+  <meta property="og:image:alt" content="Frostbound Warden ท่ามกลางภูเขาน้ำแข็ง">
+  <title>GodMian · เกรียนมอด | Heroes of Newerth</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/brand.svg">
+  <link rel="stylesheet" href="./styles/fonts.css">
+  <link rel="stylesheet" href="./styles/site.css">
+  <link rel="stylesheet" href="./styles/detail.css">
+  <script type="module" src="./js/app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main-content">ข้ามไปยังเนื้อหา</a>
+  <header class="site-header" id="site-header">
+    <div class="header-inner wrap">
+      <a class="brand" href="#home" aria-label="หน้าแรก GodMian"><img src="./assets/brand.svg" alt="" width="36" height="38"><span lang="en">GodMian</span></a>
+      <nav class="primary-nav" id="primary-nav" aria-label="เมนูหลัก">
+        <a href="#home" aria-current="page">Home</a>
+        <a href="#explore">Explore Mods</a>
+        <a href="#about">About</a>
+      </nav>
+      <div class="header-actions">
+        <button class="search-shortcut" id="global-search" aria-label="Search mods" aria-keyshortcuts="/">
+          <svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#search"/></svg><span>Search mods</span><kbd>/</kbd>
+        </button>
+        <button class="menu-toggle icon-btn" id="menu-toggle" aria-controls="primary-nav" aria-expanded="false" aria-label="เปิดเมนู">
+          <svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#menu"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+  <main id="main-content" tabindex="-1">
+    <div id="home-view">
+      <section id="home" class="hero" aria-labelledby="hero-title">
+        <div id="hero-art" class="hero-art"></div><div class="hero-shade"></div>
+        <div class="hero-inner wrap">
+          <div class="hero-copy">
+            <p class="eyebrow hero-kicker"><span class="rule"></span>Heroes of Newerth <span class="divider-slash">/</span> Mod Archive</p>
+            <h1 id="hero-title"><span lang="en">GodMian</span><br>เกรียนมอด</h1>
+            <p class="hero-description">รวมม็อด Heroes of Newerth ให้คุณสำรวจสกินฮีโร่ เอฟเฟกต์สกิล และธีมแผนที่ในแบบใหม่</p>
+            <div class="hero-actions">
+              <a href="#explore" class="btn btn-primary"><svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#grid"/></svg>Explore mods</a>
+              <a id="spotlight-link" href="#featured" class="btn btn-secondary"><svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#play"/></svg>View spotlight</a>
+            </div>
+          </div>
+          <div class="hero-base">
+            <a class="scroll-cue" href="#featured"><svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#mouse"/></svg><span>Scroll to discover</span></a>
+            <div id="hero-controls" class="hero-controls" hidden>
+              <div class="hero-caption" aria-live="polite">
+                <span id="hero-label" class="mono-caption"></span>
+                <a id="hero-mod-name" class="hero-mod-name" href="#featured"></a>
+              </div>
+              <div class="slide-count" aria-hidden="true"><b id="hero-index"></b><span>/</span><span id="hero-total"></span></div>
+              <div class="slide-buttons">
+                <button class="icon-btn round" id="hero-prev" aria-label="ผลงานเด่นก่อนหน้า"><svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#left"/></svg></button>
+                <button class="icon-btn round" id="hero-next" aria-label="ผลงานเด่นถัดไป"><svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#right"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="featured" class="featured section-space" aria-labelledby="featured-title">
+        <div class="wrap">
+          <div class="section-heading">
+            <div><p class="eyebrow"><span class="rule"></span>Curated selection</p><h2 id="featured-title">Featured mods<span class="period">.</span></h2></div>
+            <a href="#explore" class="text-link"><svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#layers"/></svg>View collection</a>
+          </div>
+          <div class="feature-grid" id="feature-grid"></div>
+        </div>
+      </section>
+      <section id="explore" class="explore section-space" aria-labelledby="explore-title">
+        <div class="wrap">
+          <div class="section-heading">
+            <div><p class="eyebrow"><span class="rule"></span>The archive</p><h2 id="explore-title">Explore mods<span class="period">.</span></h2></div>
+          </div>
+          <div class="library-tools">
+            <label class="search-field"><span class="sr-only">ค้นหาม็อดตามชื่อ</span><svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#search"/></svg><input type="search" id="mod-search" placeholder="ค้นหาตามชื่อม็อด…" autocomplete="off"></label>
+            <label class="select-field"><svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#layers"/></svg><span class="sr-only">กรองตามหมวดหมู่</span><select id="category-filter"><option value="">All categories</option></select><svg class="icon chevron" aria-hidden="true"><use href="./assets/icons.svg#down"/></svg></label>
+            <label class="select-field"><svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#sort"/></svg><span class="sr-only">เรียงตามวันที่อัปเดต</span><select id="sort-order"><option value="newest">Recently updated</option><option value="oldest">Oldest updated</option></select><svg class="icon chevron" aria-hidden="true"><use href="./assets/icons.svg#down"/></svg></label>
+          </div>
+          <p id="result-count" class="result-count" role="status"></p>
+          <div class="archive-grid" id="archive-grid"></div>
+          <div id="collection-empty" class="empty-state" hidden>
+            <h3 id="empty-title">ไม่พบม็อดที่ตรงกับการค้นหา</h3><p id="empty-description">ลองค้นด้วยชื่ออื่นหรือเลือกดูทุกหมวดหมู่</p>
+            <button id="reset-filters" class="btn btn-secondary" type="button">Clear filters</button>
+          </div>
+        </div>
+      </section>
+      <section id="about" class="about section-space" aria-labelledby="about-title">
+        <div class="wrap about-inner">
+          <div><p class="eyebrow"><span class="rule"></span>About GodMian</p><h2 id="about-title">จากแฟนเกม HoN<span class="period">.</span></h2></div>
+          <p>เกรียนมอดเป็นพื้นที่รวมผลงานแต่งภาพในเกม Heroes of Newerth ตั้งแต่สกินฮีโร่ไปจนถึงบรรยากาศของแผนที่ ให้แฟนเกมได้ชมและลองใช้เมื่อมีไฟล์ให้ดาวน์โหลด</p>
+        </div>
+      </section>
+    </div>
+    <div id="detail-view" hidden></div>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-top"><a class="brand" href="#home" aria-label="หน้าแรก GodMian"><img src="./assets/brand.svg" alt="" width="32" height="34"><span lang="en">GodMian</span></a><a href="#about">About</a></div>
+      <div class="footer-meta"><span>© 2026 GodMian</span><span>เว็บไซต์นี้จัดทำโดยแฟนเกมและไม่มีความเกี่ยวข้องอย่างเป็นทางการกับผู้พัฒนา Heroes of Newerth</span></div>
+    </div>
+  </footer>
+  <noscript><p class="no-js">เปิด JavaScript เพื่อดูคลังม็อดและภาพตัวอย่าง</p></noscript>
+</body>
+</html>

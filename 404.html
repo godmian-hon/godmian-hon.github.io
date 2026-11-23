@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#08090c">
+  <title>ไม่พบหน้าเว็บ — GodMian</title>
+  <link rel="icon" href="data:,">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      margin: 0;
+      padding: clamp(1.5rem, 7vw, 7rem);
+      display: grid;
+      grid-template-rows: auto 1fr;
+      background: radial-gradient(ellipse at 75% 35%, #132337 0%, transparent 53%), #08090c;
+      color: #f5f5f7;
+      font: 1rem/1.5 system-ui, sans-serif;
+    }
+    .brand { display: flex; align-items: center; gap: .65rem; font-size: 1.35rem; font-weight: 650; }
+    svg { width: 2rem; height: auto; }
+    main { align-self: center; padding: 3rem 0 5rem; }
+    .status { color: #97c8ff; font: 600 .85rem/1.5 ui-monospace, monospace; letter-spacing: .1em; }
+    h1 { margin: .45em 0 .18em; font-size: clamp(2.7rem, 7vw, 6.5rem); line-height: 1.02; letter-spacing: -.055em; }
+    p { max-width: 34rem; color: #b7c0cf; }
+    a { display: inline-block; margin-top: 1.25rem; border-radius: .45rem; background: #315bce; color: white; padding: .8rem 1.25rem; font-weight: 650; text-decoration: none; }
+    a:hover { background: #3868ea; }
+    a:focus-visible { outline: 3px solid #aadbff; outline-offset: 4px; }
+  </style>
+</head>
+<body>
+  <div class="brand">
+    <svg viewBox="0 0 42 44" aria-hidden="true" fill="#78adff">
+      <path d="M22.6 1 38 9.6 22.8 18.5 16.1 14.8 5.1 21.2 5.1 11.4zM39 13.5v10.3l-12.1 7-6.6-3.8v-7.3zm-33.9 12.2 8.8-5.1v7.6l13.3 7.6-7.5 5.1L1.8 30.5z"/>
+    </svg>
+    <span>GodMian</span>
+  </div>
+  <main>
+    <span class="status">ERROR 404</span>
+    <h1>ไม่พบหน้าเว็บ</h1>
+    <p>ไม่พบที่อยู่นี้ในคลังม็อดเกรียนมอด</p>
+    <a href="/" id="home-link">Back to GodMian</a>
+  </main>
+  <script>
+    const home = document.getElementById("home-link");
+
+    // Pages serves this document at the missing URL, including nested project paths.
+    async function findArchive() {
+      let folder = new URL("./", location.href);
+      const firstSegment = location.pathname.split("/")[1];
+      const root = new URL("/", location.href);
+      const candidates = new Set();
+      if (firstSegment) candidates.add(new URL("./" + firstSegment + "/", root).href);
+      while (folder.pathname !== "/") {
+        candidates.add(folder.href);
+        folder = new URL("../", folder);
+      }
+      candidates.add(root.href);
+
+      for (const directory of candidates) {
+        try {
+          const response = await fetch(new URL("index.html", directory), { redirect: "error" });
+          if (!response.ok) continue;
+          const page = await response.text();
+          if (page.includes('id="home-view"') && page.includes('id="detail-view"')) {
+            home.href = directory;
+            return;
+          }
+        } catch {
+          // A missing or redirected candidate may still have a valid parent.
+        }
+      }
+    }
+
+    if (location.protocol === "http:" || location.protocol === "https:") {
+      const ready = findArchive();
+      home.addEventListener("click", async event => {
+        if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
+        event.preventDefault();
+        await ready;
+        location.assign(home.href);
+      });
+    }
+  </script>
+</body>
+</html>

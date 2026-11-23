@@ -64,27 +64,32 @@
         "key": "Q",
         "name": "ปาการ์ดจอระเบิดไฟฟ้า",
         "icon": "./assets/art/rachatoey-skill_q.webp",
-        "description": "ตั้งท่าพิชเชอร์เบสบอลเงื้อขว้างการ์ดจอ RTX 3080 Ti โอเวอร์คล็อกพุ่งไปตกกระแทกพื้น ระเบิดกระแสไฟฟ้าแรงสูง ลดความเร็ว และเปิดทัศนวิสัยรอบพื้นที่"
+        "description": "ตั้งท่าพิชเชอร์เบสบอลเงื้อขว้างการ์ดจอ RTX 3080 Ti โอเวอร์คล็อกพุ่งไปตกกระแทกพื้น ระเบิดกระแสไฟฟ้าแรงสูง ลดความเร็ว และเปิดทัศนวิสัยรอบพื้นที่",
+        "clip": "assets/video/skill-q.mp4"
       },
       {
         "key": "W",
         "name": "ดีดนิ้วสายฟ้า",
         "icon": "./assets/art/rachatoey-skill_w.webp",
-        "description": "ชาร์จไฟฟ้าสถิตไว้ที่ปลายนิ้ว ทำให้การยิงมีโอกาสสร้างดาเมจเสริมและสตันศัตรูชั่วพริบตา"
+        "description": "ชาร์จไฟฟ้าสถิตไว้ที่ปลายนิ้ว ทำให้การยิงมีโอกาสสร้างดาเมจเสริมและสตันศัตรูชั่วพริบตา",
+        "clip": "assets/video/skill-w.mp4"
       },
       {
         "key": "E",
         "name": "แว่นสไนเปอร์ล็อกเป้า",
         "icon": "./assets/art/rachatoey-skill_e.webp",
-        "description": "ปรับโฟกัสผ่านแว่นตา เพิ่มระยะยิงจากปลายนิ้ว ระยะมองเห็น และมอบโอกาส True Strike ให้พันธมิตรรอบตัว"
+        "description": "ปรับโฟกัสผ่านแว่นตา เพิ่มระยะยิงจากปลายนิ้ว ระยะมองเห็น และมอบโอกาส True Strike ให้พันธมิตรรอบตัว",
+        "clip": "assets/video/skill-e.mp4"
       },
       {
         "key": "R",
         "name": "ปารองเท้าแตะปลิดชีพ",
         "icon": "./assets/art/rachatoey-skill_r.webp",
-        "description": "ก้มลงหยิบรองเท้าแตะ Havaianas เงื้อสุดแขนแล้วปาควงสว่านด้วยความเร็วเหนือเสียงข้ามแผนที่ฟาดหน้าศัตรู"
+        "description": "ก้มลงหยิบรองเท้าแตะ Havaianas เงื้อสุดแขนแล้วปาควงสว่านด้วยความเร็วเหนือเสียงข้ามแผนที่ฟาดหน้าศัตรู",
+        "clip": "assets/video/skill-r.mp4"
       }
     ],
-    "previewVideoUrl": "https://drive.google.com/file/d/1N8yiddXZvgC7RXUSVA9GmTF0F5ZdvmKT/view?usp=sharing"
+    "previewVideoUrl": "https://drive.google.com/file/d/1N8yiddXZvgC7RXUSVA9GmTF0F5ZdvmKT/view?usp=sharing",
+    "preview": "assets/video/rachatoey.mp4"
   }
 ]

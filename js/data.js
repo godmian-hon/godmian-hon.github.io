@@ -11,6 +11,8 @@ function imagePath(value) {
   return invalid ? "" : "./" + path;
 }
 
+const videoPath = value => /^assets\/video\/[a-z0-9_-]+\.mp4$/i.test(text(value)) ? "./" + value : "";
+
 function isoDate(value) {
   const day = text(value);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) return "";
@@ -96,9 +98,9 @@ export function normalizeMods(records) {
       description: text(record.description), longDescription: text(record.longDescription),
       comments: text(record.comments),
       skills: (Array.isArray(record.skills) ? record.skills : []).filter(skill => skill && text(skill.name)).map(skill => ({
-        key: text(skill.key), name: text(skill.name), icon: imagePath(skill.icon), description: text(skill.description)
+        key: text(skill.key), name: text(skill.name), icon: imagePath(skill.icon), clip: videoPath(skill.clip), description: text(skill.description)
       })),
-      video: getDriveLinks(record.previewVideoUrl),
+      preview: videoPath(record.preview), video: getDriveLinks(record.previewVideoUrl),
       featured: record.featured === true, concept: record.concept === true,
       createdAt, updatedAt: isoDate(record.updatedAt) || createdAt,
       fileSize: text(record.fileSize), downloadUrl: driveLinks ? downloadUrl : "", driveLinks,

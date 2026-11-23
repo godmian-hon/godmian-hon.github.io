@@ -145,6 +145,17 @@ function textSection(title) {
   return section;
 }
 
+function videoPlayer(source, title) {
+  const player = element("video", "mod-video");
+  player.src = source;
+  player.autoplay = true;
+  player.defaultMuted = player.muted = true;
+  player.playsInline = true;
+  player.controls = true;
+  player.setAttribute("aria-label", title);
+  return player;
+}
+
 export function renderDetail(mod, container) {
   closeLightbox();
   const article = element("article", "wrap detail-layout");
@@ -170,28 +181,71 @@ export function renderDetail(mod, container) {
     const section = textSection("สกิลฮีโร่");
     const grid = element("div", "skill-grid");
     for (const skill of mod.skills) {
-      const card = element("div", "skill-card");
+      const card = element("div", "skill-entry");
+      const trigger = element(skill.clip ? "button" : "div", "skill-card");
       const portrait = element("div", "skill-icon");
       portrait.append(makeImage(skill.icon, "", { width: 100, height: 100 }));
       if (skill.key) portrait.append(element("kbd", "", skill.key));
       const copy = element("div");
       copy.append(element("h3", "", skill.name), element("p", "", skill.description));
-      card.append(portrait, copy);
+      trigger.append(portrait, copy);
+      card.append(trigger);
+      if (skill.clip) {
+        trigger.type = "button";
+        const panel = element("div", "skill-preview");
+        panel.id = mod.slug + "-skill-" + grid.childElementCount;
+        panel.hidden = true;
+        trigger.setAttribute("aria-controls", panel.id);
+        trigger.setAttribute("aria-expanded", "false");
+        const show = open => {
+          if (open === !panel.hidden) return;
+          panel.hidden = !open;
+          trigger.setAttribute("aria-expanded", String(open));
+          if (open) {
+            const player = videoPlayer(skill.clip, skill.name);
+            player.loop = true;
+            panel.append(player);
+          } else {
+            panel.querySelector("video")?.pause();
+            panel.replaceChildren();
+          }
+        };
+        card.addEventListener("pointerenter", event => {
+          if (event.pointerType === "mouse") show(true);
+        });
+        card.addEventListener("pointerleave", event => {
+          if (event.pointerType === "mouse") show(false);
+        });
+        trigger.addEventListener("click", () => show(panel.hidden));
+        card.addEventListener("focusout", event => {
+          if (!card.contains(event.relatedTarget)) show(false);
+        });
+        card.addEventListener("keydown", event => {
+          if (event.key === "Escape") { trigger.focus(); show(false); }
+        });
+        card.append(panel);
+      }
       grid.append(card);
     }
     section.append(grid);
     article.append(section);
   }
-  if (mod.video) {
+  if (mod.preview || mod.video) {
     const section = textSection("วิดีโอพรีวิว");
-    const player = element("iframe", "mod-video");
-    const url = new URL(mod.video.view);
-    url.pathname = url.pathname.replace(/\/view$/, "/preview");
-    player.src = url.href;
-    player.title = "วิดีโอพรีวิว " + mod.name;
-    player.loading = "lazy";
-    player.allowFullscreen = true;
-    section.append(player, driveLink("ดูคลิปบน Google Drive", mod.video.view, "detail-drive"));
+    if (mod.preview) {
+      const player = videoPlayer(mod.preview, mod.name);
+      player.poster = mod.heroImage;
+      section.append(player);
+    } else {
+      const player = element("iframe", "mod-video");
+      const url = new URL(mod.video.view);
+      url.pathname = url.pathname.replace(/\/view$/, "/preview");
+      player.src = url.href;
+      player.title = "วิดีโอพรีวิว " + mod.name;
+      player.loading = "lazy";
+      player.allowFullscreen = true;
+      section.append(player);
+    }
     article.append(section);
   }
   if (mod.screenshots.length) {

@@ -125,3 +125,9 @@
   .detail-gallery-image img { transition: none; }
   .detail-gallery-image:hover img { transform: none; }
 }
+
+.skill-entry { min-width: 0; align-self: start; }
+.skill-entry .skill-card { width: 100%; text-align: start; color: inherit; font: inherit; }
+button.skill-card { cursor: pointer; }
+button.skill-card:hover, button.skill-card[aria-expanded="true"] { border-color: var(--scene-color); }
+.skill-preview { margin-top: .5rem; }

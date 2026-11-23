@@ -44,7 +44,11 @@ export function makeImage(src, alt, { eager = false, className = '', width = 720
 }
 
 export function modCard(mod, isEditorial = false) {
-  const article = element('article', 'mod-card');
+  const article = element('article', 'mod-card mod-item');
+  if (mod.preview) {
+    article.dataset.video = mod.preview;
+    article.dataset.desc = mod.description;
+  }
   article.style.setProperty('--scene-color', mod.accent);
   const link = element('a', 'card-link');
   link.href = '#mod/' + mod.slug;

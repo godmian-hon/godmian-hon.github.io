@@ -5,6 +5,10 @@ import { initializeCollection } from './collection.js';
 import { element } from './ui.js';
 import { initializeNavigation, setMenu, setCurrent, noteScroll } from './navigation.js';
 
+import { initializeVideoPreview } from './video-preview.js';
+
+initializeVideoPreview();
+
 const siteTitle = document.title;
 const home = document.getElementById('home-view');
 const detail = document.getElementById('detail-view');

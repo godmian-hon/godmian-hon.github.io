@@ -232,7 +232,27 @@ export function renderDetail(mod, container) {
     if (mod.preview) {
       const player = videoPlayer(mod.preview, mod.name);
       player.poster = mod.heroImage;
-      section.append(player);
+      player.controls = false;
+      player.loop = true;
+      player.disablePictureInPicture = true;
+      player.disableRemotePlayback = true;
+      player.setAttribute("controlslist", "nodownload nofullscreen noremoteplayback");
+      const frame = element("div", "main-preview");
+      const sound = element("button", "preview-sound");
+      sound.type = "button";
+      sound.setAttribute("aria-label", "เสียงวิดีโอพรีวิว");
+      sound.setAttribute("aria-pressed", "false");
+      const label = element("span", "", "เปิดเสียง");
+      sound.append(label);
+      sound.addEventListener("click", () => {
+        player.muted = !player.muted;
+        sound.setAttribute("aria-pressed", String(!player.muted));
+        label.textContent = player.muted ? "เปิดเสียง" : "ปิดเสียง";
+        if (player.paused) player.play().catch(() => {});
+      });
+      frame.addEventListener("contextmenu", event => event.preventDefault());
+      frame.append(player, sound);
+      section.append(frame);
     } else {
       const player = element("iframe", "mod-video");
       const url = new URL(mod.video.view);

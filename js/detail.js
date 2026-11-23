@@ -167,6 +167,11 @@ export function renderDetail(mod, container) {
     about.append(element("p", "", mod.longDescription));
     article.append(about);
   }
+  if (mod.comments) {
+    const comments = textSection("หมายเหตุ");
+    comments.append(element("p", "", mod.comments));
+    article.append(comments);
+  }
   if (mod.screenshots.length) {
     const gallery = textSection("ภาพตัวอย่าง");
     const images = element("div", "detail-gallery");

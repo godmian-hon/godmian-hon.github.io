@@ -94,6 +94,7 @@ export function normalizeMods(records) {
       category: text(record.category) || "Other", version: text(record.version),
       accent: /^#[0-9a-f]{6}$/i.test(text(record.accent)) ? record.accent : "#97caff",
       description: text(record.description), longDescription: text(record.longDescription),
+      comments: text(record.comments),
       featured: record.featured === true, concept: record.concept === true,
       createdAt, updatedAt: isoDate(record.updatedAt) || createdAt,
       fileSize: text(record.fileSize), downloadUrl: driveLinks ? downloadUrl : "", driveLinks,

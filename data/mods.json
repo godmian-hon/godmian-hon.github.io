@@ -26,7 +26,7 @@
       "อัลติเมต ปารองเท้าแตะปลิดชีพ ขว้างรองเท้าแตะ Havaianas พุ่งควงสว่านฝ่าพายุสายฟ้าและคลื่นกระแทก",
       "ภาพในเกม Heroes of Newerth Reborn แสดงโมเดล 3 มิติของราชาเต้ย เอฟเฟกต์แสงปลายนิ้ว และชุดไอคอนสกิลครบชุด"
     ],
-    "downloadUrl": "https://drive.google.com/uc?export=download&id=1IMmOkvMaicYYKcy_YDo9J_ArO4SJEPTK",
+    "downloadUrl": "https://drive.google.com/file/d/1TDhRIroY48koVJleTX44kBYwQGp6qch4/view?usp=sharing",
     "installationGuide": [
       "ดาวน์โหลดไฟล์แพ็กเกจ CT_FingerGun_Flint_v0.7.12.honmod มาไว้ในเครื่อง",
       "เปิดโปรแกรมจัดการม็อด Newerth Forge สำหรับ Heroes of Newerth Reborn",
@@ -59,7 +59,8 @@
     ],
     "createdAt": "2026-11-19",
     "updatedAt": "2026-11-23"
-  },
+  }
+  ,
   {
     "id": "rv-frostbound",
     "slug": "frostbound",
@@ -72,6 +73,7 @@
     "fileSize": "",
     "featured": true,
     "concept": true,
+    "comments": "คอนเซปต์ตัวอย่าง - กำลังอยู่ระหว่างพัฒนา",
     "thumbnail": "./assets/art/frostbound-thumb.webp",
     "heroImage": "./assets/art/frostbound.webp",
     "artworkAlt": "ผู้พิทักษ์สวมมงกุฎน้ำแข็งและเกราะสีเข้มยืนท่ามกลางพายุบนภูเขา",
@@ -95,6 +97,7 @@
     "fileSize": "",
     "featured": true,
     "concept": true,
+    "comments": "คอนเซปต์ตัวอย่าง - กำลังอยู่ระหว่างพัฒนา",
     "thumbnail": "./assets/art/emberfall-thumb.webp",
     "heroImage": "./assets/art/emberfall.webp",
     "artworkAlt": "อสูรเขาโค้งร่างมหึมาท่ามกลางสะเก็ดไฟในเขตภูเขาไฟ",
@@ -118,6 +121,7 @@
     "fileSize": "",
     "featured": true,
     "concept": true,
+    "comments": "คอนเซปต์ตัวอย่าง - กำลังอยู่ระหว่างพัฒนา",
     "thumbnail": "./assets/art/veilstrider-thumb.webp",
     "heroImage": "./assets/art/veilstrider.webp",
     "artworkAlt": "เอลฟ์ผมขาวถือดาบพลังงานสีม่วงอยู่ในซากวิหาร",
@@ -141,6 +145,7 @@
     "fileSize": "",
     "featured": true,
     "concept": true,
+    "comments": "คอนเซปต์ตัวอย่าง - กำลังอยู่ระหว่างพัฒนา",
     "thumbnail": "./assets/art/verdant-crossing-thumb.webp",
     "heroImage": "./assets/art/verdant-crossing.webp",
     "artworkAlt": "สะพานหินปกคลุมด้วยมอสทอดข้ามธารสีเขียวใต้ร่มไม้",

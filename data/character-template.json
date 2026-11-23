@@ -1,0 +1,71 @@
+{
+  "id": "gm-my-hero",
+  "slug": "my-hero",
+  "name": "ชื่อม็อด (ชื่อฮีโร่)",
+  "category": "Hero Skin",
+  "description": "คำโปรยสำหรับหน้าคลังและการ์ดพรีวิว",
+  "longDescription": "อธิบายสิ่งที่ม็อดเปลี่ยนในเกม",
+  "comments": "หมายเหตุสำหรับผู้เล่น",
+  "accent": "#4af2ea",
+  "version": "1.0.0",
+  "fileSize": "",
+  "createdAt": "2026-11-23",
+  "updatedAt": "2026-11-23",
+  "featured": false,
+  "concept": false,
+  "thumbnail": "assets/art/my-hero/thumb.webp",
+  "heroImage": "assets/art/my-hero/cover.webp",
+  "artworkAlt": "คำบรรยายภาพปก",
+  "screenshots": [
+    "assets/art/my-hero/gameplay.webp"
+  ],
+  "screenshotAlts": [
+    "คำบรรยายภาพในเกม"
+  ],
+  "preview": "assets/video/my-hero-preview.mp4",
+  "previewVideoUrl": "",
+  "skills": [
+    {
+      "key": "Q",
+      "name": "ชื่อสกิล Q",
+      "description": "อธิบายท่าและเอฟเฟกต์ของสกิล Q",
+      "icon": "assets/art/my-hero/skill-q.webp",
+      "clip": "assets/video/my-hero-q.mp4"
+    },
+    {
+      "key": "W",
+      "name": "ชื่อสกิล W",
+      "description": "อธิบายท่าและเอฟเฟกต์ของสกิล W",
+      "icon": "assets/art/my-hero/skill-w.webp",
+      "clip": "assets/video/my-hero-w.mp4"
+    },
+    {
+      "key": "E",
+      "name": "ชื่อสกิล E",
+      "description": "อธิบายท่าและเอฟเฟกต์ของสกิล E",
+      "icon": "assets/art/my-hero/skill-e.webp",
+      "clip": "assets/video/my-hero-e.mp4"
+    },
+    {
+      "key": "R",
+      "name": "ชื่อสกิล R",
+      "description": "อธิบายท่าและเอฟเฟกต์ของสกิล R",
+      "icon": "assets/art/my-hero/skill-r.webp",
+      "clip": "assets/video/my-hero-r.mp4"
+    }
+  ],
+  "downloadUrl": "",
+  "installationGuide": [
+    "ดาวน์โหลดแพ็กเกจม็อด",
+    "ใส่ขั้นตอนติดตั้งสำหรับตัวละครนี้"
+  ],
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-11-23",
+      "changes": [
+        "เปิดตัวม็อดรุ่นแรก"
+      ]
+    }
+  ]
+}

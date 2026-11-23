@@ -1,5 +1,66 @@
 [
   {
+    "id": "gm-rachatoey-flint",
+    "slug": "rachatoey-flint",
+    "accent": "#4af2ea",
+    "name": "ราชาเต้ย (Flint Beastwood)",
+    "category": "Hero Skin",
+    "description": "สกินราชาเต้ยสำหรับ Flint Beastwood ยิงกระสุนแสงจากปลายนิ้ว ขว้างการ์ดจอ RTX 3080 Ti ระเบิดไฟฟ้า และปารองเท้าแตะ Havaianas ปลิดชีพ",
+    "longDescription": "แปลงโฉม Flint Beastwood เป็นราชาเต้ยในเสื้อ CT LIKE U KNOW และแว่นสไนเปอร์ล็อกเป้า เปลี่ยนท่ายิงปกติเป็นการชี้นิ้วยิงกระสุนวิญญาณสีมิ้นต์ทองพร้อมเสียงเลเซอร์ สกิล 1 ตั้งท่าพิชเชอร์ขว้างการ์ดจอ RTX 3080 Ti โอเวอร์คล็อกระเบิดกระแสไฟฟ้า สกิล 4 ก้มคว้ารองเท้าแตะ Havaianas ปาควงสว่านความเร็วเหนือเสียงข้ามแผนที่พร้อมเอฟเฟกต์สายฟ้า 7 จังหวะ และท่า Taunt สวมมงกุฎทองคู่ใจพร้อมเสียงพากย์จัดเต็ม",
+    "version": "0.7.12",
+    "fileSize": "14.5 MB",
+    "featured": true,
+    "concept": false,
+    "thumbnail": "./assets/art/rachatoey-thumb.webp",
+    "heroImage": "./assets/art/rachatoey.webp",
+    "artworkAlt": "ราชาเต้ยสวมมงกุฎทอง แว่นกลม และเสื้อ CT LIKE U KNOW ชี้นิ้วยิงกระสุนสายฟ้าสีมิ้นต์ทอง",
+    "screenshots": [
+      "./assets/art/rachatoey.webp",
+      "./assets/art/rachatoey-rtx.webp",
+      "./assets/art/rachatoey-havaianas.webp",
+      "./assets/art/rachatoey-ingame.webp"
+    ],
+    "screenshotAlts": [
+      "ราชาเต้ยสวมมงกุฎทองและเสื้อ CT LIKE U KNOW ตั้งท่ายิงกระสุนพลังงานจากปลายนิ้วชี้",
+      "สกิล 1 ปาการ์ดจอระเบิดไฟฟ้า ขว้างการ์ดจอ RTX 3080 Ti ลงกระแทกพื้นจนเกิดคลื่นสายฟ้าสีมิ้นต์ทอง",
+      "อัลติเมต ปารองเท้าแตะปลิดชีพ ขว้างรองเท้าแตะ Havaianas พุ่งควงสว่านฝ่าพายุสายฟ้าและคลื่นกระแทก",
+      "ภาพในเกม Heroes of Newerth Reborn แสดงโมเดล 3 มิติของราชาเต้ย เอฟเฟกต์แสงปลายนิ้ว และชุดไอคอนสกิลครบชุด"
+    ],
+    "downloadUrl": "",
+    "installationGuide": [
+      "ดาวน์โหลดไฟล์แพ็กเกจ CT_FingerGun_Flint_v0.7.12.honmod มาไว้ในเครื่อง",
+      "เปิดโปรแกรมจัดการม็อด Newerth Forge สำหรับ Heroes of Newerth Reborn",
+      "ลากไฟล์ .honmod เข้าสู่รายการม็อดหรือกด Add Mod แล้วติ๊กเปิดใช้งาน CT Finger Gun (Flint Beastwood)",
+      "กด Apply Mods แล้วเข้าเกมเลือกฮีโร่ Flint Beastwood เพื่อทดสอบท่ายิงนิ้ว การ์ดจอ RTX 3080 Ti และอัลติรองเท้าแตะ Havaianas"
+    ],
+    "changelog": [
+      {
+        "version": "0.7.12",
+        "date": "2026-11-21",
+        "changes": [
+          "ปรับทรงและเท็กซ์เจอร์เสื้อยืด CT LIKE U KNOW ให้คมชัดและเข้ากับสรีระโมเดลทุกมุมมอง"
+        ]
+      },
+      {
+        "version": "0.7.11",
+        "date": "2026-11-20",
+        "changes": [
+          "ผูกกระดูกมงกุฎทอง _bone_ct_crown สำหรับท่า Self-Taunt หยิบมงกุฎสวมศีรษะพร้อมประกายทอง",
+          "ปรับเอฟเฟกต์อัลติรองเท้าแตะ Havaianas เพิ่มสายฟ้า 7 จังหวะ คลื่นกระแทก 2 วง และเสียงพากย์ครบชุด"
+        ]
+      },
+      {
+        "version": "0.7.0",
+        "date": "2026-11-19",
+        "changes": [
+          "เปิดตัวสกินราชาเต้ย (Flint Beastwood) พร้อมท่ายิงนิ้ว สกิลขว้างการ์ดจอ RTX 3080 Ti และไอคอนสกิล 2D ครบชุด"
+        ]
+      }
+    ],
+    "createdAt": "2026-11-19",
+    "updatedAt": "2026-11-23"
+  },
+  {
     "id": "rv-frostbound",
     "slug": "frostbound",
     "accent": "#95d9ff",

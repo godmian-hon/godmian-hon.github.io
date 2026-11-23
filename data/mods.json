@@ -2,6 +2,7 @@
   {
     "id": "rv-frostbound",
     "slug": "frostbound",
+    "accent": "#95d9ff",
     "name": "Frostbound Warden",
     "category": "Hero Skin",
     "description": "เกราะน้ำแข็งและแสงสีฟ้าเย็นสำหรับผู้พิทักษ์แดนเหนือ",
@@ -24,6 +25,7 @@
   {
     "id": "rv-emberfall",
     "slug": "emberfall",
+    "accent": "#ffac68",
     "name": "Emberfall Behemoth",
     "category": "Hero Skin",
     "description": "เปลือกหินภูเขาไฟแตกร้าวจนเห็นแกนลาวาใต้เกราะอสูร",
@@ -46,6 +48,7 @@
   {
     "id": "rv-veilstrider",
     "slug": "veilstrider",
+    "accent": "#d2abff",
     "name": "Veilstrider",
     "category": "Ability Effect",
     "description": "คมดาบคู่กวาดแสงสีม่วงผ่านหมอกในซากวิหาร",
@@ -68,6 +71,7 @@
   {
     "id": "rv-verdant-crossing",
     "slug": "verdant-crossing",
+    "accent": "#a8edaf",
     "name": "Verdant Crossing",
     "category": "Map Theme",
     "description": "สะพานหินเก่ากลางป่า ร่มไม้และมอสปกคลุมเหนือธารสีเขียว",

@@ -1,4 +1,5 @@
 import { FALLBACK_IMAGE } from './data.js';
+import { followPointer } from './motion.js';
 
 const svgNS = 'http://www.w3.org/2000/svg';
 
@@ -41,6 +42,16 @@ export function modCard(mod, isEditorial = false) {
   link.href = '#mod/' + mod.slug;
   link.setAttribute('aria-label', 'ดูรายละเอียด ' + mod.name);
   const visual = element('div', 'card-visual');
+  visual.style.setProperty('--scene-color', mod.accent);
+  followPointer(visual, (x, y) => {
+    visual.style.setProperty('--light-x', x * 100 + '%');
+    visual.style.setProperty('--light-y', y * 100 + '%');
+    visual.style.setProperty('--tilt-x', (y - .5) * -5 + 'deg');
+    visual.style.setProperty('--tilt-y', (x - .5) * 5 + 'deg');
+  }, () => {
+    visual.style.removeProperty('--tilt-x');
+    visual.style.removeProperty('--tilt-y');
+  });
   const badge = element('span', 'category-tag');
   badge.append(icon('layers'), document.createTextNode(mod.category));
   visual.append(makeImage(mod.thumbnail, mod.artworkAlt || mod.name), badge);

@@ -1,5 +1,5 @@
 import { loadMods } from './data.js';
-import { renderDetail, closeLightbox } from './detail.js';
+import { renderDetail, leaveDetail } from './detail.js';
 import { initializeHero } from './hero.js';
 import { initializeCollection } from './collection.js';
 import { element } from './ui.js';
@@ -16,6 +16,7 @@ let dataReady = false;
 let homeReady = false;
 let searchRequested = false;
 let returnLink = null;
+let artworkTransition;
 
 function recordReturn(event) {
   const link = event.target.closest('a[href^="#mod/"]');
@@ -37,7 +38,7 @@ function renderRoute(initial = false, restore = false) {
   const hash = location.hash.slice(1);
   const isDetail = hash.startsWith('mod/');
   const wasDetail = !detail.hidden;
-  closeLightbox();
+  leaveDetail();
   setMenu(false);
   home.hidden = isDetail;
   detail.hidden = !isDetail;
@@ -110,6 +111,34 @@ renderRoute(true);
 let traversing = false;
 window.addEventListener('popstate', () => { traversing = true; });
 window.addEventListener('hashchange', () => {
-  renderRoute(false, traversing);
+  const restore = traversing;
   traversing = false;
+  const hash = location.hash;
+  const openingSelection = !home.hidden && hash.startsWith('#mod/') && returnLink?.link.hash === hash;
+  const source = openingSelection && (returnLink.link.querySelector('.card-visual img') ||
+    document.querySelector('#hero-art img:last-child'));
+  if (artworkTransition || !source || !source.complete || !document.startViewTransition || reducedMotion.matches) {
+    artworkTransition?.skipTransition();
+    renderRoute(false, restore);
+    return;
+  }
+  // Let the browser carry the selected artwork from its thumbnail into the detail cover.
+  source.style.viewTransitionName = 'selected-artwork';
+  let cover;
+  const transition = document.startViewTransition(() => {
+    source.style.removeProperty('view-transition-name');
+    if (location.hash !== hash) return;
+    renderRoute(false, restore);
+    cover = detail.querySelector('.detail-cover');
+    if (cover) cover.style.viewTransitionName = 'selected-artwork';
+  });
+  artworkTransition = transition;
+  const skip = () => { if (reducedMotion.matches) transition.skipTransition(); };
+  reducedMotion.addEventListener('change', skip);
+  transition.finished.finally(() => {
+    source.style.removeProperty('view-transition-name');
+    cover?.style.removeProperty('view-transition-name');
+    reducedMotion.removeEventListener('change', skip);
+    artworkTransition = null;
+  });
 });

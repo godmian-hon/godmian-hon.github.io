@@ -1,9 +1,17 @@
 import { element, icon, makeImage } from "./ui.js";
+import { enableSwipe, imageSwitcher, revealOnScroll } from "./motion.js";
 
 const formatDay = new Intl.DateTimeFormat("th-TH", {
   calendar: "gregory", month: "short", day: "numeric", year: "numeric", timeZone: "UTC",
 });
 let openDialog = null;
+let stopReveal;
+
+export function leaveDetail() {
+  closeLightbox();
+  stopReveal?.();
+  stopReveal = null;
+}
 
 function control(label, glyph, className = "detail-icon-btn") {
   const button = element("button", className);
@@ -34,17 +42,20 @@ function openLightbox(mod, startIndex) {
   close.addEventListener("click", () => dialog.close());
   head.append(title, close);
   const stage = element("div", "detail-lightbox-stage");
+  const switchImage = imageSwitcher(stage);
   const foot = element("div", "detail-lightbox-foot");
   const caption = element("p", "detail-lightbox-count");
   caption.setAttribute("aria-live", "polite");
   foot.append(caption);
   let current = startIndex;
   function display(index) {
+    const direction = index >= current ? 1 : -1;
     current = (index + mod.screenshots.length) % mod.screenshots.length;
-    stage.replaceChildren(makeImage(mod.screenshots[current], mod.screenshotAlts[current], { eager: true }));
+    switchImage(makeImage(mod.screenshots[current], mod.screenshotAlts[current], { eager: true }), direction);
     caption.textContent = "ภาพที่ " + (current + 1) + " จาก " + mod.screenshots.length;
   }
   if (mod.screenshots.length > 1) {
+    enableSwipe(stage, delta => display(current + delta));
     const prev = control("ภาพก่อนหน้า", "left");
     const next = control("ภาพถัดไป", "right");
     prev.addEventListener("click", () => display(current - 1));
@@ -185,4 +196,5 @@ export function renderDetail(mod, container) {
   notes.append(installation, history);
   article.append(notes);
   container.replaceChildren(article);
+  stopReveal = revealOnScroll(article.querySelectorAll(".detail-section"));
 }

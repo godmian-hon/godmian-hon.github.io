@@ -120,7 +120,6 @@ function summary(mod) {
   for (const [label, value] of [
     ["เวอร์ชัน", mod.version || "ไม่ระบุ"],
     ["อัปเดต", mod.updatedAt ? humanDate(mod.updatedAt) : "ไม่ระบุ"],
-    ["ขนาดไฟล์", mod.fileSize || (mod.driveLinks ? "ไม่ระบุ" : "ยังไม่มีไฟล์")],
   ]) {
     const item = element("div");
     item.append(element("dt", "", label), element("dd", "", value));
@@ -129,10 +128,9 @@ function summary(mod) {
   panel.append(metadata);
   if (mod.driveLinks) {
     const links = element("div", "detail-downloads");
-    const download = driveLink("Download mod", mod.driveLinks.download, "detail-download");
+    const download = driveLink("Download mod", mod.driveLinks.download, "btn btn-primary detail-download");
     download.prepend(icon("download"));
-    const fallback = driveLink("Open in Google Drive", mod.driveLinks.view, "detail-drive");
-    links.append(download, fallback);
+    links.append(download);
     panel.append(links);
   } else {
     const status = element("p", "detail-status");

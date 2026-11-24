@@ -64,6 +64,7 @@ export function normalizeMods(records) {
   const mods = [];
   for (const record of records) {
     if (!record || typeof record !== "object") continue;
+    if (record.enabled === false || record.hidden === true) continue;
     const id = text(record.id);
     const slug = text(record.slug);
     const name = text(record.name);
@@ -131,9 +132,29 @@ export function normalizeMods(records) {
 export async function loadMods() {
   const response = await fetch(new URL("../data/mods.json", import.meta.url), { cache: "no-cache" });
   if (!response.ok) throw new Error("The mod catalogue could not be loaded.");
-  const entries = await response.json();
-  if (!Array.isArray(entries)) throw new TypeError("Invalid mod catalogue.");
-  const results = await Promise.allSettled(entries.map(async entry => {
+  const rawCatalogue = await response.json();
+  let entries;
+  let disabledSlugs = new Set();
+  if (Array.isArray(rawCatalogue)) {
+    entries = rawCatalogue;
+  } else if (rawCatalogue && typeof rawCatalogue === "object" && Array.isArray(rawCatalogue.mods)) {
+    entries = rawCatalogue.mods;
+    if (Array.isArray(rawCatalogue.disabled)) {
+      disabledSlugs = new Set(rawCatalogue.disabled.map(text).filter(Boolean));
+    }
+  } else {
+    throw new TypeError("Invalid mod catalogue.");
+  }
+  const activeEntries = entries.filter(entry => {
+    if (typeof entry === "string") {
+      return !entry.startsWith("-") && !entry.startsWith("_") && !disabledSlugs.has(entry);
+    }
+    if (entry && typeof entry === "object") {
+      return entry.enabled !== false && entry.hidden !== true && !disabledSlugs.has(text(entry.slug));
+    }
+    return false;
+  });
+  const results = await Promise.allSettled(activeEntries.map(async entry => {
     if (typeof entry !== "string") return entry;
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(entry)) throw new Error("Invalid character slug: " + entry);
     const file = await fetch(new URL("../data/characters/" + entry + ".json", import.meta.url), { cache: "no-cache" });
@@ -147,6 +168,6 @@ export async function loadMods() {
     if (result.status === "fulfilled") records.push(result.value);
     else console.warn(result.reason);
   }
-  if (entries.length && !records.length) throw new Error("No character files could be loaded.");
+  if (activeEntries.length && !records.length) throw new Error("No character files could be loaded.");
   return normalizeMods(records);
 }

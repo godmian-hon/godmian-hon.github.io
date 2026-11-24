@@ -11,6 +11,7 @@
   "fileSize": "",
   "createdAt": "2026-11-23",
   "updatedAt": "2026-11-23",
+  "enabled": true,
   "featured": false,
   "concept": false,
   "thumbnail": "assets/art/my-hero/thumb.webp",

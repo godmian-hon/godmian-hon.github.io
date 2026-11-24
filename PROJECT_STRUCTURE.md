@@ -13,19 +13,19 @@
 | `assets/fallback.svg` | ภาพสำรองกรณีไม่พบภาพของม็อด |
 | `styles/site.css` | ดีไซน์ส่วนกลาง แถบนำทาง Hero กริด Footer และ responsive layout |
 | `styles/detail.css` | หน้ารายละเอียดและ lightbox |
-| `styles/motion.css` | แสงและการเคลื่อนไหวของภาพ ปุ่ม และแกลเลอรี รวมถึงรูปแบบสำหรับอุปกรณ์สัมผัสและโหมดลดการเคลื่อนไหว |
-| `data/mods.json` | สารบัญ slug ตามลำดับการแสดง |
-| `data/characters/<slug>.json` | ข้อมูล รูป วิดีโอ สกิล และลิงก์ดาวน์โหลดของแต่ละตัวละคร |
-| `js/data.js` | อ่านและตรวจสอบข้อมูล แปลงลิงก์ Google Drive |
-| `js/ui.js` | ไอคอน ภาพพร้อม fallback และส่วนประกอบของรายการผลงาน |
-| `js/hero.js` | แสดงผลงานใน Hero และควบคุมการเปลี่ยนภาพ |
+| `styles/motion.css` | แสง ละอองไฟ (`hero-atmosphere`) และการเคลื่อนไหวของภาพ ปุ่ม และแกลเลอรี รวมถึงรูปแบบสำหรับอุปกรณ์สัมผัสและโหมดลดการเคลื่อนไหว |
+| `data/mods.json` | สารบัญ slug ตามลำดับการแสดงผล (รองรับการใส่ `-slug` เพื่อซ่อนชั่วคราว) |
+| `data/characters/<slug>.json` | ข้อมูล สถานะการแสดงผล (`enabled`), รูป, วิดีโอ, สกิล และลิงก์ดาวน์โหลดของแต่ละตัวละคร |
+| `js/data.js` | อ่านและตรวจสอบข้อมูล กรองเฉพาะม็อดที่เปิดใช้งาน (`enabled !== false`) ซิงก์เวอร์ชัน และแปลงลิงก์ Google Drive |
+| `js/ui.js` | ไอคอน ภาพพร้อม fallback และส่วนประกอบของการ์ดผลงาน |
+| `js/hero.js` | แสดงผลงานทั้งหมดในสไลด์ Hero Spotlight พร้อมละอองไฟลอยต่อเนื่องและควบคุมการเปลี่ยนภาพอัตโนมัติ |
 | `js/motion.js` | เปลี่ยนภาพหลังโหลดเสร็จ แสดงเนื้อหาเมื่อเลื่อนถึง และรองรับการปัดภาพกับการเคลื่อนไหวตามเมาส์ |
 | `js/collection.js` | ส่วน Featured การค้นหา กรอง และเรียงคลังผลงาน |
 | `js/navigation.js` | เมนูมือถือ ลิงก์ข้ามไปเนื้อหา คีย์ลัดค้นหา และสถานะเมนูขณะเลื่อน |
 | `js/detail.js` | รายละเอียดของม็อด แกลเลอรี lightbox และลิงก์ดาวน์โหลด |
-| `js/analytics.js` | ส่ง Event วัดผล (`mod_view`, `mod_download`, `skill_preview`, `gallery_open`) เข้า Google Tag / GA4 |
+| `js/analytics.js` | ส่ง Event วัดผล (`mod_view`, `mod_download`, `skill_preview`, `gallery_open`, `video_sound_toggle`) เข้า Google Tag / GA4 |
 | `js/app.js` | โหลดข้อมูล เชื่อมส่วนต่าง ๆ ควบคุมเมนูและ URL แบบ hash |
-| `Admin_Tool.bat`, `scripts/admin-server.py` | เว็บแอปจัดการม็อดในเครื่อง (`http://127.0.0.1:8765/admin`) สำหรับสร้าง ลบ แก้ไขม็อด อัปโหลด/พลิกภาพ และดึงคลิปสกิลจาก Google Drive |
+| `Admin_Tool.bat`, `scripts/admin-server.py` | เว็บแอปจัดการม็อดในเครื่อง (`http://127.0.0.1:8765/admin`) สำหรับสร้าง ลบ แก้ไขม็อด สลับเปิด/ปิดการแสดงผลฮีโร่ (`enabled`) อัปโหลด/แปลง/พลิกภาพ WebP และดึงคลิปสกิลจาก Google Drive |
 | `Update_Mod.bat`, `scripts/update-mod.py` | ระบบอัปเดตเวอร์ชันม็อด วันที่ ขั้นตอนติดตั้ง Changelog และซิงก์คลิปสกิลจาก Google Drive อัตโนมัติ |
 | `ANALYTICS.md` | ข้อกำหนดการติดแท็ก Google Analytics/GTM ในทุกหน้า HTML การส่ง Event และกติกาการแก้ไขระบบสำหรับ AI |
 | `HOW_TO_ADD_MODS.md` | อธิบายทุกฟิลด์ของข้อมูลและวิธีจัดการไฟล์ |

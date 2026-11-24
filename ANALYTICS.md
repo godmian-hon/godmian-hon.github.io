@@ -73,6 +73,11 @@ featured.hidden = !editorial.length;
   1. เปิดไฟล์ `data/characters/<slug>.json` (เช่น `data/characters/rachatoey-flint.json` หรือ `data/characters/zoro.json`)
   2. ตั้งค่า `"featured": true` เพื่อให้แสดงในหมวด **Featured mods.** หรือ `"featured": false` เพื่อนำออก (ม็อดที่ตั้งเป็น `false` จะยังแสดงในหมวด **Explore mods.** ด้านล่างตามปกติ)
   3. ลำดับการแสดงผลใน Featured mods จะเรียงตามลำดับรายชื่อใน `data/mods.json`
+- **วิธีเปิด/ปิดการแสดงผลฮีโร่บนเว็บ (`enabled`):**
+  - หากต้องการซ่อนฮีโร่ออกจากหน้าเว็บทั้งหมดชั่วคราว (ไม่แสดงใน Hero, Featured, Explore และ `#mod/<slug>`) ให้ตั้ง `"enabled": false` ใน `data/characters/<slug>.json` หรือกดปุ่ม **`🚫 ปิด`** ในหน้า `Admin_Tool.bat` (`http://127.0.0.1:8765/admin`) หรือใส่ `-` หน้าชื่อ slug ใน `data/mods.json`
+- **วิธีดูยอดดาวน์โหลดและกิจกรรมบน Google Analytics 4:**
+  - **แบบเรียลไทม์ (30 นาทีล่าสุด):** ไปที่เมนู **รายงาน → ภาพรวมแบบเรียลไทม์** แล้วดูการ์ด **"จำนวนเหตุการณ์ ตาม ชื่อกิจกรรม"** (`mod_download`, `mod_view`, `skill_preview`, `gallery_open`)
+  - **ยอดสะสมย้อนหลัง:** ไปที่เมนู **ดูการมีส่วนร่วมและการคงผู้ใช้ไว้ → กิจกรรม (Events)** แล้วคลิกดูที่ `mod_download` (สามารถเพิ่ม Custom Dimension `mod_name` และ `mod_slug` ในเมนูผู้ดูแลระบบ → คำจำกัดความที่กำหนดเอง เพื่อดูยอดแยกตามชื่อฮีโร่ได้)
 
 ---
 
@@ -85,3 +90,13 @@ featured.hidden = !editorial.length;
 - **ระบบคลิปสกิล (`skills[].clip`) และการอัปเดตเวอร์ชันม็อดอัตโนมัติ (`Update_Mod.bat` / `scripts/update-mod.py`):**
   - ฟังก์ชัน `skillClipPath()` ใน `js/data.js` จะแปลงลิงก์ Google Drive `https://drive.google.com/file/d/<FILE_ID>/view` ให้ชี้ไปยังไฟล์ในโปรเจกต์ที่ `./assets/video/drive-<FILE_ID>.mp4` (ไม่ได้สตรีมจาก Google Drive โดยตรงขณะเปิดเว็บ)
   - เมื่อต้องการอัปเดตเวอร์ชันม็อด วันที่อัปเดต ขั้นตอนติดตั้ง (`installationGuide`) ประวัติ (`changelog`) หรือดึงคลิปสกิลใหม่จาก Google Drive ให้รัน `Update_Mod.bat` (หรือ `scripts/update-mod.py --auto` / `--slug <slug> --version <ver> --note "<ข้อความ>"`) ซึ่งจะซิงก์ทุกจุดให้อัตโนมัติโดยไม่ต้องใช้ Node.js
+
+---
+
+## 5. แผนพัฒนาต่อยอด (Future Roadmap / To-Do)
+
+1. **ระบบปลดล็อกแจกสกินตามยอดผู้ติดตาม TikTok (TikTok Follower Goal / Milestone Unlock):**
+   - ดึงยอดผู้ติดตามจากหน้าโปรไฟล์ TikTok มาแสดงเป็นหลอดความคืบหน้าบนหน้าเว็บ (เช่น `ผู้ติดตาม TikTok 850 / 1,000 คน`)
+   - รองรับฟิลด์ `tiktokGoal` ใน `data/characters/<slug>.json` และในหน้า Admin หากยอดผู้ติดตามยังไม่ถึงเป้าจะซ่อนลิงก์ดาวน์โหลดและแสดงปุ่มไปกดติดตามช่อง TikTok แทน เมื่อยอดถึงเป้าแล้วจะปลดล็อกปุ่ม **Download mod** อัตโนมัติ
+2. **ระบบดึงยอดดาวน์โหลด (`mod_download`) จาก GA4 มาแสดงบนการ์ดและหน้าดาวน์โหลด:**
+   - ใช้ GitHub Actions ดึงข้อมูลจาก GA4 Data API (เก็บ Service Account JSON ใน GitHub Secrets) แล้วบันทึกลง `data/stats.json` ตามรอบเวลาเพื่อให้หน้าเว็บแสดงยอดดาวน์โหลดจริงโดยไม่เปิดเผยคีย์ลับบนฝั่งเบราว์เซอร์

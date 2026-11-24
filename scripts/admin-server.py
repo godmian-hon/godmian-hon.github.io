@@ -45,10 +45,14 @@ def load_all_mods() -> dict:
         slugs = json.loads(MODS_JSON.read_text(encoding="utf-8"))
     characters: list[dict] = []
     seen = set()
-    for slug in slugs:
+    for raw_slug in slugs:
+        disabled_in_list = isinstance(raw_slug, str) and (raw_slug.startswith("-") or raw_slug.startswith("_"))
+        slug = raw_slug.lstrip("-_") if isinstance(raw_slug, str) else ""
         p = CHARS_DIR / f"{slug}.json"
         if p.exists():
             d = json.loads(p.read_text(encoding="utf-8"))
+            if disabled_in_list:
+                d["enabled"] = False
             characters.append(enrich_mod_status(d))
             seen.add(slug)
     # Also include any character json files not in mods.json
@@ -272,6 +276,16 @@ ADMIN_HTML = r"""<!doctype html>
       margin-left: 4px;
     }
     .badge.feat { background: #1e4620; color: #7ee787; }
+    .badge.on { background: #143d22; color: #56d364; border: 1px solid #238636; }
+    .badge.off { background: #491c1c; color: #ff9492; border: 1px solid #da3633; }
+    .toggle-pill {
+      padding: 4px 9px;
+      font-size: 12px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .toggle-pill.is-on { background: #163822; border-color: #2ea043; color: #7ee787; }
+    .toggle-pill.is-off { background: #3b1719; border-color: #da3633; color: #ffa198; }
     .content {
       padding: 20px;
       max-width: 1100px;
@@ -472,10 +486,12 @@ ADMIN_HTML = r"""<!doctype html>
         div.className = 'mod-item' + (mod.slug === currentSlug ? ' active' : '');
         div.onclick = () => { currentSlug = mod.slug; renderSidebar(); renderEditor(); };
         const info = document.createElement('div');
+        const isEnabled = mod.enabled !== false;
         info.innerHTML = `
-          <div class="mod-item-title">${escapeHtml(mod.name || mod.slug)}</div>
+          <div class="mod-item-title" style="${!isEnabled ? 'opacity:0.55;text-decoration:line-through' : ''}">${escapeHtml(mod.name || mod.slug)}</div>
           <div class="mod-item-sub">
             v${escapeHtml(mod.version || '-')} · ${escapeHtml(mod.updatedAt || '-')}
+            ${isEnabled ? '<span class="badge on">แสดงบนเว็บ</span>' : '<span class="badge off">ซ่อนอยู่</span>'}
             ${mod.featured ? '<span class="badge feat">Featured</span>' : ''}
             ${mod.concept ? '<span class="badge">Concept</span>' : ''}
           </div>
@@ -483,6 +499,11 @@ ADMIN_HTML = r"""<!doctype html>
         const arrows = document.createElement('div');
         arrows.className = 'row';
         arrows.onclick = e => e.stopPropagation();
+        const tog = document.createElement('button');
+        tog.className = 'toggle-pill ' + (isEnabled ? 'is-on' : 'is-off');
+        tog.title = isEnabled ? 'คลิกเพื่อซ่อนฮีโร่นี้จากหน้าเว็บทันที' : 'คลิกเพื่อเปิดแสดงฮีโร่นี้บนหน้าเว็บทันที';
+        tog.textContent = isEnabled ? '👁️ เปิด' : '🚫 ปิด';
+        tog.onclick = () => toggleModEnabled(mod.slug, !isEnabled);
         const up = document.createElement('button');
         up.className = 'btn-sm';
         up.textContent = '⬆️';
@@ -493,7 +514,7 @@ ADMIN_HTML = r"""<!doctype html>
         dn.textContent = '⬇️';
         dn.disabled = idx === state.characters.length - 1;
         dn.onclick = () => moveMod(idx, 1);
-        arrows.append(up, dn);
+        arrows.append(tog, up, dn);
         div.append(info, arrows);
         list.append(div);
       });
@@ -507,6 +528,16 @@ ADMIN_HTML = r"""<!doctype html>
       await api('/api/mods/reorder', { slugs });
       toast('จัดลำดับม็อดเรียบร้อย');
       await loadData(currentSlug);
+    }
+
+    async function toggleModEnabled(slug, enabled) {
+      try {
+        await api('/api/mods/toggle', { slug, enabled });
+        toast(enabled ? `🟢 เปิดแสดง "${slug}" บนหน้าเว็บแล้ว` : `🚫 ซ่อน "${slug}" จากหน้าเว็บแล้ว`, enabled ? '#238636' : '#d29922');
+        await loadData(currentSlug);
+      } catch (e) {
+        toast('เปลี่ยนสถานะไม่สำเร็จ: ' + e.message, '#da3633');
+      }
     }
 
     function getCurrentMod() {
@@ -534,8 +565,17 @@ ADMIN_HTML = r"""<!doctype html>
       ];
 
       panel.innerHTML = `
-        <div class="quick-bump">
-          <h3>⚡ อัปเดตเวอร์ชันด่วน (แก้จุดเดียว ซิงก์วันที่ + วิธีติดตั้ง + Changelog ให้อัตโนมัติ)</h3>
+        <div class="quick-bump" style="${mod.enabled === false ? 'background:#2b1416;border-color:#da3633' : ''}">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:12px;flex-wrap:wrap">
+            <h3 style="margin:0;color:${mod.enabled === false ? '#ffa198' : '#7ee787'}">
+              ${mod.enabled === false
+                ? '🚫 ฮีโร่นี้ถูกปิดการแสดงผลอยู่ (จะไม่แสดงบนหน้าเว็บหลัก)'
+                : '⚡ อัปเดตเวอร์ชันด่วน & สถานะการแสดงผลบนเว็บ'}
+            </h3>
+            <button type="button" class="${mod.enabled === false ? 'btn-success' : 'btn-danger'}" onclick="toggleModEnabled('${escapeHtml(mod.slug)}', ${mod.enabled === false ? 'true' : 'false'})">
+              ${mod.enabled === false ? '🟢 เปิดแสดงฮีโร่นี้บนหน้าเว็บทันที' : '🚫 ปิด/ซ่อนฮีโร่นี้จากหน้าเว็บทันที'}
+            </button>
+          </div>
           <div class="grid-3">
             <div>
               <label>เลขเวอร์ชันใหม่ (เช่น 0.7.13)</label>
@@ -576,8 +616,9 @@ ADMIN_HTML = r"""<!doctype html>
               <input type="text" id="f-accent" value="${escapeHtml(mod.accent || '#4af2ea')}">
             </div>
             <div class="checkbox-row">
-              <label><input type="checkbox" id="f-featured" ${mod.featured ? 'checked' : ''}> ⭐ แสดงใน Featured mods</label>
-              <label><input type="checkbox" id="f-concept" ${mod.concept ? 'checked' : ''}> 🎨 ภาพคอนเซปต์</label>
+              <label><input type="checkbox" id="f-enabled" ${mod.enabled !== false ? 'checked' : ''}> 🟢 เปิดแสดงบนเว็บ (Enabled)</label>
+              <label><input type="checkbox" id="f-featured" ${mod.featured ? 'checked' : ''}> ⭐ Featured</label>
+              <label><input type="checkbox" id="f-concept" ${mod.concept ? 'checked' : ''}> 🎨 คอนเซปต์</label>
             </div>
           </div>
 
@@ -860,6 +901,7 @@ ADMIN_HTML = r"""<!doctype html>
         name: document.getElementById('f-name').value.trim(),
         category: document.getElementById('f-category').value.trim(),
         accent: document.getElementById('f-accent').value.trim(),
+        enabled: document.getElementById('f-enabled').checked,
         featured: document.getElementById('f-featured').checked,
         concept: document.getElementById('f-concept').checked,
         version: document.getElementById('f-version').value.trim(),
@@ -1238,6 +1280,8 @@ class AdminRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self.handle_delete_mod(body)
             elif parsed.path == "/api/mods/reorder":
                 self.handle_reorder_mods(body)
+            elif parsed.path == "/api/mods/toggle":
+                self.handle_toggle_mod(body)
             elif parsed.path == "/api/drive/probe":
                 self.handle_probe_drive(body)
             elif parsed.path == "/api/clips/sync":
@@ -1307,6 +1351,7 @@ class AdminRequestHandler(http.server.SimpleHTTPRequestHandler):
             "longDescription": f"รายละเอียดเต็มของ {name}",
             "version": "0.1.0",
             "fileSize": "",
+            "enabled": True,
             "featured": True,
             "concept": False,
             "thumbnail": "./assets/fallback.svg",
@@ -1365,6 +1410,25 @@ class AdminRequestHandler(http.server.SimpleHTTPRequestHandler):
             raise ValueError("รายการ slugs ไม่ถูกต้อง")
         MODS_JSON.write_text(json.dumps(slugs, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         self.send_json({"ok": True})
+
+    def handle_toggle_mod(self, body: dict) -> None:
+        slug = (body.get("slug") or "").strip().lstrip("-_")
+        enabled = bool(body.get("enabled", True))
+        if not slug:
+            raise ValueError("ไม่ระบุ slug")
+        char_path = CHARS_DIR / f"{slug}.json"
+        if not char_path.exists():
+            raise ValueError(f"ไม่พบไฟล์ {slug}.json")
+        data = json.loads(char_path.read_text(encoding="utf-8"))
+        data["enabled"] = enabled
+        char_path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        # Also clean up any '-' prefix in mods.json if present
+        if MODS_JSON.exists():
+            raw_slugs = json.loads(MODS_JSON.read_text(encoding="utf-8"))
+            cleaned = [s.lstrip("-_") if isinstance(s, str) and s.lstrip("-_") == slug else s for s in raw_slugs]
+            if cleaned != raw_slugs:
+                MODS_JSON.write_text(json.dumps(cleaned, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        self.send_json({"ok": True, "slug": slug, "enabled": enabled})
 
     def handle_probe_drive(self, body: dict) -> None:
         url = (body.get("url") or "").strip()

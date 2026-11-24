@@ -1,5 +1,6 @@
 import { element, humanDate, icon, makeImage } from "./ui.js";
 import { enableSwipe, imageSwitcher, revealOnScroll } from "./motion.js";
+import { trackGalleryOpen, trackModDownload, trackSkillPreview, trackVideoSoundToggle } from "./analytics.js";
 
 let openDialog = null;
 let stopReveal;
@@ -88,7 +89,10 @@ export function imageButton(mod, index) {
   const badge = element("span", "detail-enlarge");
   badge.append(icon("expand"));
   button.append(badge);
-  button.addEventListener("click", () => openLightbox(mod, index));
+  button.addEventListener("click", () => {
+    trackGalleryOpen(mod, index);
+    openLightbox(mod, index);
+  });
   return button;
 }
 
@@ -123,6 +127,7 @@ function summary(mod) {
     const links = element("div", "detail-downloads");
     const download = driveLink("Download mod", mod.driveLinks.download, "btn btn-primary detail-download");
     download.prepend(icon("download"));
+    download.addEventListener("click", () => trackModDownload(mod));
     links.append(download);
     panel.append(links);
   } else {
@@ -201,6 +206,7 @@ export function renderDetail(mod, container) {
         panel.hidden = !open;
         trigger.setAttribute("aria-expanded", String(open));
         if (open) {
+          trackSkillPreview(mod, skill);
           if (skill.clip) {
             const player = videoPlayer(skill.clip, skill.name);
             player.loop = true;
@@ -246,6 +252,7 @@ export function renderDetail(mod, container) {
       sound.append(label);
       sound.addEventListener("click", () => {
         player.muted = !player.muted;
+        trackVideoSoundToggle(mod, player.muted);
         sound.setAttribute("aria-pressed", String(!player.muted));
         label.textContent = player.muted ? "เปิดเสียง" : "ปิดเสียง";
         if (player.paused) player.play().catch(() => {});

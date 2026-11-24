@@ -4,6 +4,7 @@ import { initializeHero } from './hero.js';
 import { initializeCollection } from './collection.js';
 import { element } from './ui.js';
 import { initializeNavigation, setMenu, setCurrent, noteScroll } from './navigation.js';
+import { trackModView, trackPageView } from './analytics.js';
 
 import { initializeVideoPreview } from './video-preview.js';
 
@@ -51,6 +52,7 @@ function renderRoute(initial = false, restore = false) {
     if (mod) renderDetail(mod, detail);
     else showUnknown();
     document.title = (mod?.name || 'ไม่พบม็อด') + ' — GodMian';
+    if (mod) trackModView(mod);
     setCurrent('explore');
     window.scrollTo({ top: 0, behavior: 'instant' });
     const heading = detail.querySelector('h1');
@@ -67,6 +69,7 @@ function renderRoute(initial = false, restore = false) {
   }
   detail.replaceChildren();
   document.title = siteTitle;
+  if (!initial) trackPageView();
   if (restore && wasDetail && returnLink?.hash === location.hash && returnLink.link.isConnected) {
     window.scrollTo({ top: returnLink.y, behavior: 'instant' });
     returnLink.link.focus({ preventScroll: true });

@@ -23,7 +23,9 @@
 | `js/collection.js` | ส่วน Featured การค้นหา กรอง และเรียงคลังผลงาน |
 | `js/navigation.js` | เมนูมือถือ ลิงก์ข้ามไปเนื้อหา คีย์ลัดค้นหา และสถานะเมนูขณะเลื่อน |
 | `js/detail.js` | รายละเอียดของม็อด แกลเลอรี lightbox และลิงก์ดาวน์โหลด |
+| `js/analytics.js` | ส่ง Event วัดผล (`mod_view`, `mod_download`, `skill_preview`, `gallery_open`) เข้า Google Tag / GA4 |
 | `js/app.js` | โหลดข้อมูล เชื่อมส่วนต่าง ๆ ควบคุมเมนูและ URL แบบ hash |
+| `ANALYTICS.md` | ข้อกำหนดการติดแท็ก Google Analytics/GTM ในทุกหน้า HTML การส่ง Event และกติกาการแก้ไขระบบสำหรับ AI |
 | `HOW_TO_ADD_MODS.md` | อธิบายทุกฟิลด์ของข้อมูลและวิธีจัดการไฟล์ |
 | `DEPLOYMENT.md` | ตั้งค่า GitHub Pages และอัปเดตเว็บไซต์ |
 | `DESIGN_SYSTEM.md` | แนวทางภาพ ตัวอักษร เลย์เอาต์ และปฏิสัมพันธ์ |

@@ -18,6 +18,7 @@ export function initializeHero(mods) {
   const previous = document.getElementById('hero-prev');
   const next = document.getElementById('hero-next');
   let index = 0;
+  let restartRotation;
   const hero = document.getElementById('home');
   const switchImage = imageSwitcher(stage, 220);
   const prepared = new Map();
@@ -57,6 +58,7 @@ export function initializeHero(mods) {
   }
 
   function showSlide(position) {
+    restartRotation?.();
     const direction = position >= index ? 1 : -1;
     index = (position + slides.length) % slides.length;
     const mod = slides[index];
@@ -85,6 +87,27 @@ export function initializeHero(mods) {
       { opacity: .35, transform: 'translateX(' + direction * 8 + 'px)' },
       { opacity: 1, transform: 'none' }
     ]);
+  }
+
+  if (slides.length > 1) {
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    let visible = false;
+    let timer;
+    function schedule() {
+      clearTimeout(timer);
+      if (visible && !document.hidden && !reduced.matches && !hero.matches(':focus-within')) {
+        timer = setTimeout(() => showSlide(index + 1), 6000);
+      }
+    }
+    restartRotation = schedule;
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      schedule();
+    }).observe(hero);
+    reduced.addEventListener('change', schedule);
+    document.addEventListener('visibilitychange', schedule);
+    hero.addEventListener('focusin', schedule);
+    hero.addEventListener('focusout', () => queueMicrotask(schedule));
   }
 
   previous.addEventListener('click', () => showSlide(index - 1));

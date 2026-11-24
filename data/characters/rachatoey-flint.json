@@ -71,14 +71,15 @@
       "name": "ดีดนิ้วสายฟ้า",
       "icon": "./assets/art/rachatoey-skill_w.webp",
       "description": "ชาร์จไฟฟ้าสถิตไว้ที่ปลายนิ้ว ทำให้การยิงมีโอกาสสร้างดาเมจเสริมและสตันศัตรูชั่วพริบตา",
-      "clip": "https://drive.google.com/file/d/1NnSHKgpQ1iJhcJ4F_zITEelktc9uZP5a/view?usp=drive_link"
+      "clip": "assets/video/skill-w.mp4",
+      "clipSource": "https://drive.google.com/file/d/1NnSHKgpQ1iJhcJ4F_zITEelktc9uZP5a/view?usp=drive_link"
     },
     {
       "key": "E",
       "name": "แว่นสไนเปอร์ล็อกเป้า",
       "icon": "./assets/art/rachatoey-skill_e.webp",
       "description": "ปรับโฟกัสผ่านแว่นตา เพิ่มระยะยิงจากปลายนิ้ว ระยะมองเห็น และมอบโอกาส True Strike ให้พันธมิตรรอบตัว",
-      "clip": ""
+      "clip": "assets/video/skill-e.mp4"
     },
     {
       "key": "R",

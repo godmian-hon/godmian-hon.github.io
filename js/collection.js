@@ -5,7 +5,7 @@ import { imageButton } from './detail.js';
 export function initializeCollection(mods, failed = false) {
   const picks = mods.filter(mod => mod.featured);
   const featured = document.getElementById('featured');
-  const editorial = picks.slice(1);
+  const editorial = picks;
   featured.hidden = !editorial.length;
   document.getElementById('feature-grid').replaceChildren(...editorial.map(mod => modCard(mod, true)));
   if (featured.hidden) document.querySelector('.scroll-cue').href = '#explore';

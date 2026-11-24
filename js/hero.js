@@ -3,7 +3,8 @@ import { animate, enableSwipe, followPointer, imageSwitcher } from './motion.js'
 
 export function initializeHero(mods) {
   const featured = mods.filter(mod => mod.featured);
-  const slides = featured.length ? featured : mods.slice(0, 1);
+  const slides = [...featured].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  if (!slides.length && mods.length) slides.push(mods[0]);
   const controls = document.getElementById('hero-controls');
   const spotlightLink = document.getElementById('spotlight-link');
   if (!slides.length) {

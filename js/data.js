@@ -118,14 +118,14 @@ export function normalizeMods(records) {
 }
 
 export async function loadMods() {
-  const response = await fetch(new URL("../data/mods.json", import.meta.url));
+  const response = await fetch(new URL("../data/mods.json", import.meta.url), { cache: "no-cache" });
   if (!response.ok) throw new Error("The mod catalogue could not be loaded.");
   const entries = await response.json();
   if (!Array.isArray(entries)) throw new TypeError("Invalid mod catalogue.");
   const results = await Promise.allSettled(entries.map(async entry => {
     if (typeof entry !== "string") return entry;
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(entry)) throw new Error("Invalid character slug: " + entry);
-    const file = await fetch(new URL("../data/characters/" + entry + ".json", import.meta.url));
+    const file = await fetch(new URL("../data/characters/" + entry + ".json", import.meta.url), { cache: "no-cache" });
     if (!file.ok) throw new Error("Could not load character: " + entry);
     const character = await file.json();
     if (character?.slug !== entry) throw new Error("Character slug mismatch: " + entry);

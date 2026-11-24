@@ -28,33 +28,33 @@
     {
       "key": "Q",
       "name": "เคลือบฮาคิ 3 ดาบ",
-      "description": "เคลือบฮาคิเกราะสีดำม่วงลงบนดาบทั้ง 3 เล่ม (วาโดอิจิมอนจิ, เอนมะ, ซันไดคิเทตสึ) เพิ่มพลังฟันและทำให้ศัตรูติดใบ้เมื่อโจมตี",
       "icon": "assets/art/zoro/skill-q.webp",
-      "clip": ""
+      "description": "เคลือบฮาคิเกราะสีดำม่วงลงบนดาบทั้ง 3 เล่ม (วาโดอิจิมอนจิ, เอนมะ, ซันไดคิเทตสึ) เพิ่มพลังฟันและทำให้ศัตรูติดใบ้เมื่อโจมตี",
+      "clip": "https://drive.google.com/file/d/1UOFrn6vy6S0Xk6-nivPG5goQo2RX8AKk/view?usp=sharing"
     },
     {
       "key": "W",
       "name": "วิชา 3 ดาบ: มังกรดำทอร์นาโด",
-      "description": "โซโลหมุนตัวเรียกลมพายุหมุนมังกรดำสีเขียวมรกตโหมกระหน่ำใส่เป้าหมายระยะไกล สร้างความเสียหายและลดความเร็วเคลื่อนที่อย่างรุนแรง",
       "icon": "assets/art/zoro/skill-w.webp",
-      "clip": ""
+      "description": "โซโลหมุนตัวเรียกลมพายุหมุนมังกรดำสีเขียวมรกตโหมกระหน่ำใส่เป้าหมายระยะไกล สร้างความเสียหายและลดความเร็วเคลื่อนที่อย่างรุนแรง",
+      "clip": "https://drive.google.com/file/d/1qeBBnUgKs5-xHNG1mN1h4ukSQT4QeM1h/view?usp=sharing"
     },
     {
       "key": "E",
       "name": "วิชา 3 ดาบ: โอนิกิริพิภพนรก",
-      "description": "ตั้งท่าไขว้ดาบทั้งสามแล้วพุ่งทะยานฟันศัตรูตามเส้นทางด้วยความเร็วสูงสุด",
       "icon": "assets/art/zoro/skill-e.webp",
-      "clip": ""
+      "description": "ตั้งท่าไขว้ดาบทั้งสามแล้วพุ่งทะยานฟันศัตรูตามเส้นทางด้วยความเร็วสูงสุด",
+      "clip": "https://drive.google.com/file/d/1BsbKOxbRrJutuzUihjZIKrCLjJEVLBWg/view?usp=sharing"
     },
     {
       "key": "R",
       "name": "ฮาคิราชัน (Haoshoku)",
-      "description": "ระเบิดจิตคุกคามฮาคิราชันสีแดงดำปกคลุมพื้นที่ ปิดกั้นวิสัยทัศน์ของศัตรูทั้งหมดและตัดการมองเห็นร่วมกับเพื่อน",
       "icon": "assets/art/zoro/skill-r.webp",
-      "clip": ""
+      "description": "ระเบิดจิตคุกคามฮาคิราชันสีแดงดำปกคลุมพื้นที่ ปิดกั้นวิสัยทัศน์ของศัตรูทั้งหมดและตัดการมองเห็นร่วมกับเพื่อน",
+      "clip": "https://drive.google.com/file/d/1hq1UHZTeaT5L9uB8qXTUjK3zW1v7pnot/view?usp=sharing"
     }
   ],
-  "downloadUrl": "https://drive.google.com/file/d/1-CRYmeyxL0txWsG32PWTAGrERZ2MldpA/view?usp=sharing",
+  "downloadUrl": "",
   "installationGuide": [],
   "changelog": []
 }

@@ -1,18 +1,18 @@
 {
   "id": "gm-baki",
   "slug": "baki",
-  "accent": "#4af2ea",
+  "accent": "#ea0909",
   "name": "บากิ (Rampage)",
   "category": "Hero Skin",
-  "description": "คำอธิบายสั้นของ บากิ (Rampage)",
-  "longDescription": "รายละเอียดเต็มของ บากิ (Rampage)",
+  "description": "สกิน Baki Hanma สำหรับ Rampage วิ่งพุ่งชนท่าแมลงสาบแดช เปิดแผ่นหลังอสูรกระทืบพื้น และคว้าโซ่ลากศัตรูถูไปกับพื้น",
+  "longDescription": "เปลี่ยนแรด Rampage ให้กลายเป็น บากิ ฮันมะ แชมป์สังเวียนใต้ดิน มาครบทั้งท่าวิ่งชาร์จข้ามแมพแบบแมลงสาบแดช จังหวะเปิดสกิลเบ่งกล้ามแผ่นหลังอสูรเดินกระทืบพื้น หมัดหนักฮันมะต่อยติดสตั๊น และอัลติคว้าโซ่แดงลากศัตรูไถไปกับพื้นแบบดิบๆ",
   "version": "0.1.0",
   "fileSize": "",
   "featured": true,
-  "concept": false,
+  "concept": true,
   "thumbnail": "./assets/art/baki-thumb.webp",
   "heroImage": "./assets/art/baki.webp",
-  "artworkAlt": "บากิ (Rampage)",
+  "artworkAlt": "บากิ ฮันมะ พันผ้าพันมือเตรียมขึ้นสังเวียนท่ามกลางโซ่เหล็ก",
   "screenshots": [],
   "screenshotAlts": [],
   "downloadUrl": "",
@@ -36,30 +36,30 @@
   "skills": [
     {
       "key": "Q",
-      "name": "สกิล 1",
+      "name": "แมลงสาบแดช (Cockroach Dash)",
       "icon": "./assets/art/baki-skill_q.webp",
-      "description": "",
+      "description": "ย่อตัวออกสตาร์ทความเร็วศูนย์ถึงร้อยในพริบตา วิ่งลัดเลาะข้ามแมพพุ่งเข้าไปกระโดดถีบเป้าหมายจนกระเด็น",
       "clip": "https://drive.google.com/file/d/1kZkCSXItTx4dFZdorR795jzVFoit9ZTU/view?usp=sharing"
     },
     {
       "key": "W",
-      "name": "สกิล 2",
+      "name": "ปลุกแผ่นหลังอสูร (Demon Back)",
       "icon": "./assets/art/baki-skill_w.webp",
-      "description": "",
+      "description": "เบ่งกล้ามแผ่นหลังปีศาจตระกูลฮันมะ เร่งสปีดเดินย่ำพื้นปล่อยคลื่นกระแทกสโลว์ศัตรูรอบตัวทุกจังหวะก้าว",
       "clip": "https://drive.google.com/file/d/1OE9NDhSQnsPokDg-nZiWLH-70mbBJDYq/view?usp=sharing"
     },
     {
       "key": "E",
-      "name": "สกิล 3",
+      "name": "หมัดหนักฮันมะ",
       "icon": "./assets/art/baki-skill_e.webp",
-      "description": "",
+      "description": "บิดเอวซัดหมัดตรงพันผ้าเต็มแรง เมื่อคูลดาวน์ครบจะต่อยศัตรูหน้าหงายติดสตั๊นและกระเด็นถอยหลัง",
       "clip": "https://drive.google.com/file/d/154NUNPhyqdSCRJ85zIiFRGYvPL2GZX74/view?usp=sharing"
     },
     {
       "key": "R",
-      "name": "อัลติเมต",
+      "name": "โซ่คล้องลากสังเวียน",
       "icon": "./assets/art/baki-skill_r.webp",
-      "description": "",
+      "description": "คว้าโซ่เหล็กสีแดงล็อกตัวศัตรูแล้วกระชากลากถูไปกับพื้นตามทางที่เราวิ่ง ทำดาเมจใส่ไม่ยั้ง",
       "clip": "https://drive.google.com/file/d/1AYyC9d4d2cpTsoxqGMGB1lEy2PwcuWc-/view?usp=sharing"
     }
   ],

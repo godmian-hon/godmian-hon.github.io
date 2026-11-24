@@ -3,8 +3,8 @@
   "slug": "zoro",
   "name": "โซโร (The Dark Lady)",
   "category": "Hero Skin",
-  "description": "สกิน Roronoa Zoro สำหรับ The Dark Lady พร้อมท่าฟันฮาคิ พายุมังกรดำ และเสียงพากย์ญี่ปุ่น",
-  "longDescription": "นักดาบแห่งกลุ่มโจรสลัดหมวกฟาง ผู้ใช้วิชาสามดาบ (Santoryu) เคลือบฮาคิเกราะสีดำ ฟันคลื่นดาบระยะไกล พุ่งฟันทะลวงศัตรูด้วยความเร็วเหนือสายตา และปลดปล่อยฮาคิราชันแห่งราชานรก",
+  "description": "สกิน Roronoa Zoro สำหรับ The Dark Lady คาบดาบฟันสามเล่ม เคลือบฮาคิ ปั่นพายุมังกรดำ และระเบิดฮาคิราชัน",
+  "longDescription": "โรโรโนอา โซโร นักดาบกลุ่มหมวกฟางในร่างโลกใหม่ สวมทับ The Dark Lady คาบดาบวาโดอิจิมอนจิไว้ที่ปากตลอดทุกท่วงท่า มาพร้อมท่าควงดาบเคลือบฮาคิเกราะ ปั่นพายุดาบมังกรดำระยะไกล พุ่งฟันโอนิกิริความเร็วสูง และอัลติระเบิดฮาคิราชันปิดแมพมืดพร้อมเสียงพากย์ญี่ปุ่นแท้",
   "comments": "",
   "accent": "#68c587",
   "version": "0.4.0",
@@ -13,8 +13,8 @@
   "updatedAt": "2026-11-23",
   "featured": true,
   "concept": true,
-  "thumbnail": "assets/art/zoro/thumb.webp",
-  "heroImage": "assets/art/zoro/cover.webp",
+  "thumbnail": "./assets/art/zoro/thumb.webp",
+  "heroImage": "./assets/art/zoro/cover.webp",
   "artworkAlt": "โซโรถือดาบบนดาดฟ้าเรือกับกลุ่มโจรสลัดหมวกฟาง",
   "screenshots": [
     "assets/art/zoro/cover.webp"
@@ -29,28 +29,28 @@
       "key": "Q",
       "name": "เคลือบฮาคิ 3 ดาบ",
       "icon": "assets/art/zoro/skill-q.webp",
-      "description": "เคลือบฮาคิเกราะสีดำม่วงลงบนดาบทั้ง 3 เล่ม (วาโดอิจิมอนจิ, เอนมะ, ซันไดคิเทตสึ) เพิ่มพลังฟันและทำให้ศัตรูติดใบ้เมื่อโจมตี",
+      "description": "ควงดาบอัดฮาคิเกราะสีดำม่วงลงบนดาบทั้งสามเล่ม เร่งพลังโจมตีและทำให้คนที่โดนฟันติดใบ้ใช้สกิลไม่ได้",
       "clip": "https://drive.google.com/file/d/1UOFrn6vy6S0Xk6-nivPG5goQo2RX8AKk/view?usp=sharing"
     },
     {
       "key": "W",
-      "name": "วิชา 3 ดาบ: มังกรดำทอร์นาโด",
+      "name": "วิชา 3 ดาบ: พายุมังกรดำ",
       "icon": "assets/art/zoro/skill-w.webp",
-      "description": "โซโลหมุนตัวเรียกลมพายุหมุนมังกรดำสีเขียวมรกตโหมกระหน่ำใส่เป้าหมายระยะไกล สร้างความเสียหายและลดความเร็วเคลื่อนที่อย่างรุนแรง",
+      "description": "หมุนตัวเหวี่ยงดาบซัดพายุคมดาบสีเขียวมรกตใส่เป้าหมายระยะไกล ทำดาเมจพร้อมดึงขาให้เดินช้าลงอย่างหนัก",
       "clip": "https://drive.google.com/file/d/1qeBBnUgKs5-xHNG1mN1h4ukSQT4QeM1h/view?usp=sharing"
     },
     {
       "key": "E",
-      "name": "วิชา 3 ดาบ: โอนิกิริพิภพนรก",
-      "icon": "assets/art/zoro/skill-e.webp",
-      "description": "ตั้งท่าไขว้ดาบทั้งสามแล้วพุ่งทะยานฟันศัตรูตามเส้นทางด้วยความเร็วสูงสุด",
+      "name": "วิชา 3 ดาบ: เรนโกคุ โอนิกิริ",
+      "icon": "./assets/art/zoro/skill-e.webp",
+      "description": "ย่อตัวตั้งท่าไขว้ดาบสามเล่มแล้วพุ่งทะยานเฉือนศัตรูทุกตัวที่ขวางหน้าด้วยความเร็วสูง พร้อมเร่งความเร็วโจมตีต่อเนื่อง",
       "clip": "https://drive.google.com/file/d/1BsbKOxbRrJutuzUihjZIKrCLjJEVLBWg/view?usp=sharing"
     },
     {
       "key": "R",
-      "name": "ฮาคิราชัน (Haoshoku)",
+      "name": "จิตคุกคามฮาคิราชัน",
       "icon": "assets/art/zoro/skill-r.webp",
-      "description": "ระเบิดจิตคุกคามฮาคิราชันสีแดงดำปกคลุมพื้นที่ ปิดกั้นวิสัยทัศน์ของศัตรูทั้งหมดและตัดการมองเห็นร่วมกับเพื่อน",
+      "description": "ระเบิดออร่าฮาคิราชันสีแดงดำแห่งราชานรกกดดันทั่วสมรภูมิ ปิดวิสัยทัศน์ฝั่งตรงข้ามให้มืดสนิทและมองไม่เห็นเพื่อนร่วมทีม",
       "clip": "https://drive.google.com/file/d/1hq1UHZTeaT5L9uB8qXTUjK3zW1v7pnot/view?usp=sharing"
     }
   ],

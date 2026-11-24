@@ -25,6 +25,7 @@
 | `js/detail.js` | รายละเอียดของม็อด แกลเลอรี lightbox และลิงก์ดาวน์โหลด |
 | `js/analytics.js` | ส่ง Event วัดผล (`mod_view`, `mod_download`, `skill_preview`, `gallery_open`) เข้า Google Tag / GA4 |
 | `js/app.js` | โหลดข้อมูล เชื่อมส่วนต่าง ๆ ควบคุมเมนูและ URL แบบ hash |
+| `Update_Mod.bat`, `scripts/update-mod.py` | ระบบอัปเดตเวอร์ชันม็อด วันที่ ขั้นตอนติดตั้ง Changelog และซิงก์คลิปสกิลจาก Google Drive อัตโนมัติ |
 | `ANALYTICS.md` | ข้อกำหนดการติดแท็ก Google Analytics/GTM ในทุกหน้า HTML การส่ง Event และกติกาการแก้ไขระบบสำหรับ AI |
 | `HOW_TO_ADD_MODS.md` | อธิบายทุกฟิลด์ของข้อมูลและวิธีจัดการไฟล์ |
 | `DEPLOYMENT.md` | ตั้งค่า GitHub Pages และอัปเดตเว็บไซต์ |

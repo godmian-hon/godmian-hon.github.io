@@ -27,7 +27,7 @@
   ],
   "downloadUrl": "https://drive.google.com/file/d/1TDhRIroY48koVJleTX44kBYwQGp6qch4/view?usp=sharing",
   "installationGuide": [
-    "ดาวน์โหลดไฟล์แพ็กเกจ FingerGun_Flint_v0.7.12.honmod มาไว้ในเครื่อง",
+    "ดาวน์โหลดไฟล์แพ็กเกจ CT_FingerGun_Flint_v0.7.12.honmod มาไว้ในเครื่อง",
     "เปิดโปรแกรมจัดการม็อด Newerth Forge สำหรับ Heroes of Newerth Reborn",
     "ลากไฟล์ .honmod เข้าสู่รายการม็อดหรือกด Add Mod แล้วติ๊กเปิดใช้งาน Finger Gun (Flint Beastwood)",
     "กด Apply Mods แล้วเข้าเกมเลือกฮีโร่ Flint Beastwood เพื่อทดสอบท่ายิงนิ้ว การ์ดจอ RTX และอัลติรองเท้าแตะ"
@@ -56,8 +56,7 @@
       "name": "นิ้วสายฟ้า",
       "icon": "./assets/art/rachatoey-skill_w.webp",
       "description": "ชาร์จไฟฟ้าสถิตไว้ที่ปลายนิ้ว ทำให้การยิงมีโอกาสสร้างดาเมจเสริมและสตันศัตรูชั่วพริบตา",
-      "clip": "assets/video/skill-w.mp4",
-      "clipSource": "https://drive.google.com/file/d/1NnSHKgpQ1iJhcJ4F_zITEelktc9uZP5a/view?usp=sharing"
+      "clip": "https://drive.google.com/file/d/1NnSHKgpQ1iJhcJ4F_zITEelktc9uZP5a/view?usp=sharing"
     },
     {
       "key": "E",

@@ -76,9 +76,12 @@ featured.hidden = !editorial.length;
 
 ---
 
-## 4. มาตรฐานการอัปเดตภาพไอคอนสกิล (`assets/art/`)
+## 4. มาตรฐานการอัปเดตภาพไอคอนสกิล (`assets/art/`) และคลิปสกิล (`assets/video/`)
 
-- ภาพไอคอนสกิล (`Q`, `W`, `E`, `R`) ในเว็บใช้ฟอร์แมต **WebP ขนาด `256×256` พิกเซล** (เช่น `assets/art/rachatoey-skill_q.webp`)
-- เมื่อแปลงไฟล์จาก PNG ต้นฉบับ (เช่น `1024×1024`) เป็น WebP ด้วย Blender 5.3:
-  - ต้องตั้งค่า `scene.display_settings.display_device = "sRGB"` และ `scene.view_settings.view_transform = "Standard"` (ห้ามใช้ค่าเริ่มต้น `AgX` เพราะจะทำให้สีฟ้ามิ้นต์/ทองของไอคอนซีดเพี้ยน)
-  - ย่อขนาดเป็น `256×256` และบันทึกด้วย `file_format = "WEBP"`, `color_mode = "RGB"`, `quality = 90`
+- ภาพไอคอนสกิล (`Q`, `W`, `E`, `R`) ในเว็บใช้ฟอร์แมต **WebP** (เช่น `assets/art/rachatoey-skill_q.webp` ขนาด `256×256` หรือ `assets/art/zoro/skill-*.webp` ขนาด `128×128`)
+- **ข้อควรระวังเรื่องภาพกลับหัว (`.dds` Vertical Flip):** ไฟล์ `icon.dds` ของเอนจิน K2 (HoN Reborn) เก็บพิกเซลแบบ OpenGL (ล่างขึ้นบน) หากแปลงจาก `icon.dds` มาเป็น WebP บนหน้าเว็บ ต้องพลิกแกนตั้ง (`arr[::-1]`) เสมอเพื่อไม่ให้ไอคอนสกิลกลับหัว
+- เมื่อแปลงไฟล์ด้วย Blender 5.3:
+  - ต้องตั้งค่า `scene.display_settings.display_device = "sRGB"` และ `scene.view_settings.view_transform = "Standard"` (ห้ามใช้ค่าเริ่มต้น `AgX` เพราะจะทำให้สีของไอคอนซีดเพี้ยน)
+- **ระบบคลิปสกิล (`skills[].clip`) และการอัปเดตเวอร์ชันม็อดอัตโนมัติ (`Update_Mod.bat` / `scripts/update-mod.py`):**
+  - ฟังก์ชัน `skillClipPath()` ใน `js/data.js` จะแปลงลิงก์ Google Drive `https://drive.google.com/file/d/<FILE_ID>/view` ให้ชี้ไปยังไฟล์ในโปรเจกต์ที่ `./assets/video/drive-<FILE_ID>.mp4` (ไม่ได้สตรีมจาก Google Drive โดยตรงขณะเปิดเว็บ)
+  - เมื่อต้องการอัปเดตเวอร์ชันม็อด วันที่อัปเดต ขั้นตอนติดตั้ง (`installationGuide`) ประวัติ (`changelog`) หรือดึงคลิปสกิลใหม่จาก Google Drive ให้รัน `Update_Mod.bat` (หรือ `scripts/update-mod.py --auto` / `--slug <slug> --version <ver> --note "<ข้อความ>"`) ซึ่งจะซิงก์ทุกจุดให้อัตโนมัติโดยไม่ต้องใช้ Node.js

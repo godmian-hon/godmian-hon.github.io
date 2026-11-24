@@ -95,23 +95,34 @@ export function normalizeMods(records) {
       .filter(entry => entry && typeof entry === "object")
       .map(entry => ({ version: text(entry.version), date: isoDate(entry.date), changes: list(entry.changes) }))
       .filter(entry => entry.changes.length) : [];
+    const version = text(record.version) || changelog[0]?.version || "";
     const createdAt = isoDate(record.createdAt);
+    const latestChangelogDate = changelog.map(entry => entry.date).filter(Boolean).sort().pop() || "";
+    const rawUpdatedAt = isoDate(record.updatedAt);
+    const updatedAt = [rawUpdatedAt, latestChangelogDate, createdAt].filter(Boolean).sort().pop() || "";
     const downloadUrl = text(record.downloadUrl);
     const driveLinks = getDriveLinks(downloadUrl);
+    const installationGuide = list(record.installationGuide).map(step =>
+      version
+        ? step
+            .replace(/\{version\}/gi, version)
+            .replace(/(_v)\d+(?:\.\d+)+(\.honmod\b)/gi, "$1" + version + "$2")
+        : step
+    );
     mods.push({
       id, slug, name, thumbnail: thumbnail || heroImage, heroImage, artworkAlt, screenshots, screenshotAlts,
-      category: text(record.category) || "Other", version: text(record.version),
+      category: text(record.category) || "Other", version,
       accent: /^#[0-9a-f]{6}$/i.test(text(record.accent)) ? record.accent : "#97caff",
       description: text(record.description), longDescription: text(record.longDescription),
       comments: text(record.comments),
       skills: (Array.isArray(record.skills) ? record.skills : []).filter(skill => skill && text(skill.name)).map(skill => ({
-        key: text(skill.key), name: text(skill.name), icon: imagePath(skill.icon), clip: skillClipPath(skill.clip), description: text(skill.description)
+        key: text(skill.key), name: text(skill.name), icon: imagePath(skill.icon), clip: skillClipPath(skill.clip || skill.clipSource), description: text(skill.description)
       })),
       preview: videoPath(record.preview), video: getDriveLinks(record.previewVideoUrl),
       featured: record.featured === true, concept: record.concept === true,
-      createdAt, updatedAt: isoDate(record.updatedAt) || createdAt,
+      createdAt, updatedAt,
       fileSize: text(record.fileSize), downloadUrl: driveLinks ? downloadUrl : "", driveLinks,
-      installationGuide: list(record.installationGuide), changelog,
+      installationGuide, changelog,
     });
   }
   return mods;

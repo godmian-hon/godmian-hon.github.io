@@ -1,0 +1,68 @@
+{
+  "id": "gm-baki",
+  "slug": "baki",
+  "accent": "#4af2ea",
+  "name": "บากิ (Rampage)",
+  "category": "Hero Skin",
+  "description": "คำอธิบายสั้นของ บากิ (Rampage)",
+  "longDescription": "รายละเอียดเต็มของ บากิ (Rampage)",
+  "version": "0.1.0",
+  "fileSize": "",
+  "featured": false,
+  "concept": false,
+  "thumbnail": "./assets/art/baki-thumb.webp",
+  "heroImage": "./assets/art/baki.webp",
+  "artworkAlt": "บากิ (Rampage)",
+  "screenshots": [],
+  "screenshotAlts": [],
+  "downloadUrl": "",
+  "installationGuide": [
+    "ดาวน์โหลดไฟล์แพ็กเกจ baki_v0.1.0.honmod มาไว้ในเครื่อง",
+    "เปิดโปรแกรมจัดการม็อด Newerth Forge สำหรับ Heroes of Newerth Reborn",
+    "ลากไฟล์ .honmod เข้าสู่รายการม็อดแล้วติ๊กเปิดใช้งาน บากิ (Rampage)",
+    "กด Apply Mods แล้วเข้าเกมเพื่อใช้งาน"
+  ],
+  "changelog": [
+    {
+      "version": "0.1.0",
+      "date": "2026-11-24",
+      "changes": [
+        "เปิดตัวม็อด บากิ (Rampage)"
+      ]
+    }
+  ],
+  "createdAt": "2026-11-24",
+  "updatedAt": "2026-11-24",
+  "skills": [
+    {
+      "key": "Q",
+      "name": "สกิล 1",
+      "icon": "./assets/art/baki-skill_q.webp",
+      "description": "",
+      "clip": "https://drive.google.com/file/d/1kZkCSXItTx4dFZdorR795jzVFoit9ZTU/view?usp=sharing"
+    },
+    {
+      "key": "W",
+      "name": "สกิล 2",
+      "icon": "./assets/art/baki-skill_w.webp",
+      "description": "",
+      "clip": "https://drive.google.com/file/d/1OE9NDhSQnsPokDg-nZiWLH-70mbBJDYq/view?usp=sharing"
+    },
+    {
+      "key": "E",
+      "name": "สกิล 3",
+      "icon": "./assets/art/baki-skill_e.webp",
+      "description": "",
+      "clip": "https://drive.google.com/file/d/154NUNPhyqdSCRJ85zIiFRGYvPL2GZX74/view?usp=sharing"
+    },
+    {
+      "key": "R",
+      "name": "อัลติเมต",
+      "icon": "./assets/art/baki-skill_r.webp",
+      "description": "",
+      "clip": "https://drive.google.com/file/d/1AYyC9d4d2cpTsoxqGMGB1lEy2PwcuWc-/view?usp=sharing"
+    }
+  ],
+  "previewVideoUrl": "",
+  "preview": ""
+}

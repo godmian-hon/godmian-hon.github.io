@@ -34,7 +34,7 @@ export function revealOnScroll(nodes) {
 }
 
 // Keep the previous artwork on screen while the selected image decodes.
-export function imageSwitcher(stage) {
+export function imageSwitcher(stage, duration = 520) {
   let latest;
   let transition;
   return async (image, direction = 1) => {
@@ -53,7 +53,7 @@ export function imageSwitcher(stage) {
     transition = animate(image, [
       { opacity: 0, transform: 'translateX(' + direction * 12 + 'px) scale(1.035)' },
       { opacity: 1, transform: 'none' }
-    ], { duration: 520 });
+    ], { duration });
     if (transition) await transition.finished.catch(() => {});
     previous.remove();
   };

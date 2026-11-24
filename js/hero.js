@@ -19,7 +19,8 @@ export function initializeHero(mods) {
   const next = document.getElementById('hero-next');
   let index = 0;
   const hero = document.getElementById('home');
-  const switchImage = imageSwitcher(stage);
+  const switchImage = imageSwitcher(stage, 220);
+  const prepared = new Map();
   const atmosphere = document.createElement('div');
   atmosphere.className = 'hero-atmosphere';
   atmosphere.setAttribute('aria-hidden', 'true');
@@ -49,15 +50,31 @@ export function initializeHero(mods) {
   });
   if (slides.length > 1) enableSwipe(hero, delta => showSlide(index + delta));
 
+  function slideImage(mod) {
+    return makeImage(mod.heroImage || mod.thumbnail, mod.artworkAlt || mod.name, {
+      eager: true, width: 1920, height: 840, className: 'spotlight-art'
+    });
+  }
+
   function showSlide(position) {
     const direction = position >= index ? 1 : -1;
     index = (position + slides.length) % slides.length;
     const mod = slides[index];
-    const img = makeImage(mod.heroImage || mod.thumbnail, mod.artworkAlt || mod.name, {
-      eager: true, width: 1920, height: 840, className: 'spotlight-art'
-    });
+    const img = prepared.get(mod) || slideImage(mod);
+    prepared.delete(mod);
     img.fetchPriority = 'high';
     switchImage(img, direction);
+    const neighbors = new Set([slides[(index + 1) % slides.length], slides[(index + slides.length - 1) % slides.length]]);
+    for (const cached of prepared.keys()) {
+      if (!neighbors.has(cached)) prepared.delete(cached);
+    }
+    for (const neighbor of neighbors) {
+      if (neighbor === mod || prepared.has(neighbor)) continue;
+      const upcoming = slideImage(neighbor);
+      upcoming.fetchPriority = 'low';
+      prepared.set(neighbor, upcoming);
+      upcoming.decode().catch(() => {});
+    }
     hero.style.setProperty('--scene-color', mod.accent);
     drift();
     modName.textContent = mod.name;

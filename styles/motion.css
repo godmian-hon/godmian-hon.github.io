@@ -14,34 +14,37 @@
   .hero-description { animation-delay: 125ms; }
   .hero-actions { animation-delay: 185ms; }
   .hero-base { animation: arrive .55s .24s ease-out backwards; }
-  .hero .rule { background: linear-gradient(90deg, var(--cyan, #25e8ff), var(--scene-color, #4f6bff), var(--violet, #a82ffc)); transition: background .5s; }
+  .hero .rule { background: var(--pop, #b52bff); box-shadow: 0 0 10px rgb(181 43 255 / 65%); transition: background .5s; }
   .hero h1 span {
-    background-image: linear-gradient(100deg, #ffffff 0%, #6be8ff 32%, var(--scene-color, #4f6bff) 62%, #b742ff 100%);
+    background-image: linear-gradient(92deg, #e5f2ff 0%, #96d7ff 44%, #c654ff 52%, #a220ff 100%);
   }
   .hero-atmosphere {
     display: block; position: absolute; inset: 0; z-index: 0;
-    overflow: hidden; pointer-events: none; color: var(--scene-color, var(--cyan, #25e8ff));
+    overflow: hidden; pointer-events: none; color: var(--scene-color, var(--ice));
   }
   .hero-atmosphere i {
     position: absolute; width: var(--size, 3.5px); height: var(--size, 3.5px); border-radius: 50%;
-    background: #effcff;
-    box-shadow: 0 0 6px 1px #25e8ff, 0 0 14px 3px currentColor;
+    background: #fff6e5;
+    box-shadow: 0 0 6px 1px #ffb347, 0 0 14px 3px currentColor;
     opacity: 0; animation: drift-light 4.2s ease-in-out infinite;
   }
   .hero-atmosphere i:nth-child(3n) {
     width: calc(var(--size, 3.5px) * 0.75); height: calc(var(--size, 3.5px) * 1.7); border-radius: 70%;
-    background: #f5d9ff;
-    box-shadow: 0 0 7px 1px #b742ff, 0 0 16px 3px #4348f7;
+    background: #f3d4ff;
+    box-shadow: 0 0 8px 2px #b52bff, 0 0 16px 3px #b52bff;
   }
   .hero-atmosphere i:nth-child(2n) {
     background: currentColor;
-    box-shadow: 0 0 8px 2px currentColor, 0 0 16px 3px #a82ffc90;
+    box-shadow: 0 0 8px 2px currentColor, 0 0 16px 3px #ff7b2980;
   }
   .scroll-cue .icon { animation: scroll-hint 1.45s .7s 2 ease-in-out; }
-  .btn, .round, .detail-icon-btn, .detail-download {
+  .btn, .detail-icon-btn, .detail-download {
     transition: transform .2s ease-out, background-color .2s, border-color .2s, box-shadow .2s;
   }
-  :is(.btn,.round,.detail-icon-btn,.detail-download):active { transform: scale(.96); }
+  .round {
+    transition: background-color .2s, border-color .2s, box-shadow .2s;
+  }
+  :is(.btn,.detail-icon-btn,.detail-download):active { transform: scale(.96); }
   .btn-primary, .detail-download { position: relative; overflow: hidden; isolation: isolate; }
   :is(.btn-primary,.detail-download)::after {
     content: ""; position: absolute; inset: -10% 0; pointer-events: none;
@@ -80,22 +83,22 @@
     content: ""; position: absolute; inset: 0; z-index: 1;
     border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .24s;
     background: radial-gradient(ellipse at var(--light-x, 50%) var(--light-y, 50%),
-      color-mix(in srgb, var(--scene-color, #25e8ff) 28%, transparent), transparent 64%);
+      color-mix(in srgb, var(--scene-color, #a1c6ff) 26%, transparent), transparent 64%);
   }
   .card-visual:hover::before { opacity: 1; }
   .card-link:is(:hover,:focus-visible) .card-visual {
-    box-shadow: 0 12px 28px -12px color-mix(in srgb, var(--scene-color, #25e8ff) 45%, #a82ffc40);
+    box-shadow: 0 10px 25px -14px color-mix(in srgb, var(--pop, #b52bff) 55%, transparent);
   }
-  .round:hover, .btn:hover, .detail-download:hover { transform: translateY(-2px); }
-  .round:active, .btn:active, .detail-download:active { transform: scale(.96); }
+  .btn:hover, .detail-download:hover { transform: translateY(-2px); }
+  .btn:active, .detail-download:active { transform: scale(.96); }
 }
 
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
     .site-header::after {
-      content: ""; position: absolute; inset: auto 0 -1px; height: 2.5px; pointer-events: none;
+      content: ""; position: absolute; inset: auto 0 -1px; height: 2px; pointer-events: none;
       transform-origin: left; transform: scaleX(0);
-      background: linear-gradient(90deg, #25e8ff 0%, #4348f7 50%, #b742ff 100%);
+      background: linear-gradient(90deg, #597df8 0%, #91d8ff 50%, #c64aff 100%);
       animation: reading-progress linear both;
       animation-timeline: scroll(root block);
     }

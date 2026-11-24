@@ -1,0 +1,68 @@
+{
+  "id": "gm-mihawk",
+  "slug": "mihawk",
+  "accent": "#4af2ea",
+  "name": "ตาเหยี่ยว (Solstice)",
+  "category": "Hero Skin",
+  "description": "คำอธิบายสั้นของ ตาเหยี่ยว (Solstice)",
+  "longDescription": "รายละเอียดเต็มของ ตาเหยี่ยว (Solstice)",
+  "version": "0.1.0",
+  "fileSize": "",
+  "featured": false,
+  "concept": true,
+  "thumbnail": "./assets/art/mihawk-thumb.webp",
+  "heroImage": "./assets/art/mihawk.webp",
+  "artworkAlt": "ตาเหยี่ยว (Solstice)",
+  "screenshots": [],
+  "screenshotAlts": [],
+  "downloadUrl": "",
+  "installationGuide": [
+    "ดาวน์โหลดไฟล์แพ็กเกจ mihawk_v0.1.0.honmod มาไว้ในเครื่อง",
+    "เปิดโปรแกรมจัดการม็อด Newerth Forge สำหรับ Heroes of Newerth Reborn",
+    "ลากไฟล์ .honmod เข้าสู่รายการม็อดแล้วติ๊กเปิดใช้งาน ตาเหยี่ยว (Solstice)",
+    "กด Apply Mods แล้วเข้าเกมเพื่อใช้งาน"
+  ],
+  "changelog": [
+    {
+      "version": "0.1.0",
+      "date": "2026-11-24",
+      "changes": [
+        "เปิดตัวม็อด ตาเหยี่ยว (Solstice)"
+      ]
+    }
+  ],
+  "createdAt": "2026-11-24",
+  "updatedAt": "2026-11-24",
+  "skills": [
+    {
+      "key": "Q",
+      "name": "สกิล 1",
+      "icon": "./assets/art/mihawk-skill_q.webp",
+      "description": "",
+      "clip": "https://drive.google.com/file/d/1UfqN4ZZNNfhQ9s1fYjB7MjpeCHadO81D/view?usp=sharing"
+    },
+    {
+      "key": "W",
+      "name": "สกิล 2",
+      "icon": "./assets/art/mihawk-skill_w.webp",
+      "description": "",
+      "clip": "https://drive.google.com/file/d/1ZKol8Na_Lww6si9I1GiFA5QkwQGr6j6N/view?usp=sharing"
+    },
+    {
+      "key": "E",
+      "name": "สกิล 3",
+      "icon": "./assets/art/mihawk-skill_e.webp",
+      "description": "",
+      "clip": "https://drive.google.com/file/d/1nSjDkZBrWEGsZQjQHALIx2LekLIUCPbR/view?usp=sharing"
+    },
+    {
+      "key": "R",
+      "name": "อัลติเมต",
+      "icon": "./assets/art/mihawk-skill_r.webp",
+      "description": "",
+      "clip": "https://drive.google.com/file/d/1PjvqkOPvc317St5gCZyO12iF4OlJYxEr/view?usp=sharing"
+    }
+  ],
+  "previewVideoUrl": "",
+  "preview": ""
+}

@@ -92,16 +92,30 @@ def enrich_mod_status(data: dict, in_catalogue: bool = True) -> dict:
     return d
 
 
-def convert_or_flip_webp_with_blender(src_path: Path, dst_path: Path, size: int | None = None, flip_y: bool = False) -> None:
+def convert_or_flip_webp_with_blender(
+    src_path: Path,
+    dst_path: Path,
+    size: int | None = None,
+    max_width: int | None = None,
+    custom_w: int | None = None,
+    custom_h: int | None = None,
+    flip_y: bool = False,
+    quality: int = 92,
+) -> tuple[int, int]:
+    dst_path.parent.mkdir(parents=True, exist_ok=True)
     if not BLENDER_EXE.exists():
         shutil.copy2(src_path, dst_path)
-        return
+        return (0, 0)
     code = """
-import os, bpy, numpy as np
+import os, json, bpy, numpy as np
 src = os.environ["BL_SRC"]
 dst = os.environ["BL_DST"]
 target_size = int(os.environ.get("BL_SIZE", "0"))
+max_width = int(os.environ.get("BL_MAX_W", "0"))
+custom_w = int(os.environ.get("BL_CUSTOM_W", "0"))
+custom_h = int(os.environ.get("BL_CUSTOM_H", "0"))
 flip_y = os.environ.get("BL_FLIP", "0") == "1"
+quality = int(os.environ.get("BL_QUALITY", "92"))
 
 img = bpy.data.images.load(src, check_existing=False)
 w, h = img.size
@@ -109,11 +123,34 @@ arr = np.array(img.pixels[:], dtype=np.float32).reshape(h, w, 4)
 if flip_y:
     arr = arr[::-1, :, :].copy()
 
+# If target_size > 0 (square icon preset), center-crop 1:1 if rectangular, and use exact box-averaging when integer multiple
+if target_size > 0:
+    if w != h:
+        side = min(w, h)
+        y0 = (h - side) // 2
+        x0 = (w - side) // 2
+        arr = arr[y0:y0 + side, x0:x0 + side, :].copy()
+        w = h = side
+    if w > target_size and w % target_size == 0:
+        f = w // target_size
+        arr = arr.reshape(target_size, f, target_size, f, 4).mean(axis=(1, 3))
+        w = h = target_size
+
 out_img = bpy.data.images.new("out_webp", width=w, height=h, alpha=True)
 out_img.colorspace_settings.name = "sRGB"
 out_img.pixels.foreach_set(arr.ravel())
+
+final_w, final_h = w, h
 if target_size > 0 and (w != target_size or h != target_size):
     out_img.scale(target_size, target_size)
+    final_w = final_h = target_size
+elif custom_w > 0 and custom_h > 0 and (w != custom_w or h != custom_h):
+    out_img.scale(custom_w, custom_h)
+    final_w, final_h = custom_w, custom_h
+elif max_width > 0 and w > max_width:
+    final_w = max_width
+    final_h = max(1, int(round(h * (max_width / float(w)))))
+    out_img.scale(final_w, final_h)
 
 scene = bpy.context.scene
 scene.display_settings.display_device = "sRGB"
@@ -123,8 +160,9 @@ scene.view_settings.exposure = 0.0
 scene.view_settings.gamma = 1.0
 scene.render.image_settings.file_format = "WEBP"
 scene.render.image_settings.color_mode = "RGBA"
-scene.render.image_settings.quality = 92
+scene.render.image_settings.quality = max(1, min(100, quality))
 out_img.save_render(dst, scene=scene)
+print("WEBP_DIMS:" + json.dumps([final_w, final_h]))
 """
     with tempfile.NamedTemporaryFile("w", suffix=".py", delete=False, encoding="utf-8") as tmp:
         tmp.write(code)
@@ -134,10 +172,19 @@ out_img.save_render(dst, scene=scene)
         env["BL_SRC"] = str(src_path)
         env["BL_DST"] = str(dst_path)
         env["BL_SIZE"] = str(size or 0)
+        env["BL_MAX_W"] = str(max_width or 0)
+        env["BL_CUSTOM_W"] = str(custom_w or 0)
+        env["BL_CUSTOM_H"] = str(custom_h or 0)
         env["BL_FLIP"] = "1" if flip_y else "0"
+        env["BL_QUALITY"] = str(quality)
         res = subprocess.run([str(BLENDER_EXE), "--background", "--python", str(script_p)], env=env, capture_output=True, text=True)
         if res.returncode != 0:
             raise RuntimeError(res.stderr or res.stdout)
+        for line in (res.stdout or "").splitlines():
+            if line.startswith("WEBP_DIMS:"):
+                dims = json.loads(line.split("WEBP_DIMS:", 1)[1])
+                return (int(dims[0]), int(dims[1]))
+        return (0, 0)
     finally:
         script_p.unlink(missing_ok=True)
 
@@ -638,18 +685,20 @@ ADMIN_HTML = r"""<!doctype html>
           <h2>3. รูปภาพปก แกลเลอรี และวิดีโอพรีวิวหลัก</h2>
           <div class="grid-3">
             <div>
-              <label>ภาพย่อ (thumbnail)</label>
+              <label>ภาพย่อ (thumbnail — แนะนำกว้าง ~720px WebP)</label>
               <div class="row">
-                <input type="text" id="f-thumbnail" value="${escapeHtml(mod.thumbnail)}">
-                <label class="btn btn-sm" style="margin:0">📁<input type="file" accept="image/*" style="display:none" onchange="uploadArtImage('f-thumbnail', '${escapeHtml(mod.slug)}-thumb.webp', this.files[0])"></label>
+                <input type="text" id="f-thumbnail" value="${escapeHtml(mod.thumbnail)}" oninput="document.getElementById('prev-thumb').src='/' + this.value.replace(/^\\.\\//,'') + '?t=' + Date.now()">
+                <label class="btn btn-sm btn-primary" style="margin:0">📁 แปลงรูปใส่ปกย่อ<input type="file" accept="image/*,.dds,.tga" style="display:none" onchange="uploadArtImage('f-thumbnail', '${escapeHtml(mod.slug)}-thumb.webp', this.files[0], 720, 'prev-thumb')"></label>
               </div>
+              <img id="prev-thumb" src="/${escapeHtml((mod.thumbnail || '').replace(/^\.\//, ''))}?t=${Date.now()}" style="margin-top:8px;width:100%;max-height:110px;object-fit:cover;border-radius:6px;border:1px solid var(--border);background:#000" onerror="this.src='/assets/fallback.svg'">
             </div>
             <div>
-              <label>ภาพปกหลัก (heroImage)</label>
+              <label>ภาพปกหลัก (heroImage — แนะนำกว้าง ~1600-1920px WebP)</label>
               <div class="row">
-                <input type="text" id="f-heroImage" value="${escapeHtml(mod.heroImage)}">
-                <label class="btn btn-sm" style="margin:0">📁<input type="file" accept="image/*" style="display:none" onchange="uploadArtImage('f-heroImage', '${escapeHtml(mod.slug)}.webp', this.files[0])"></label>
+                <input type="text" id="f-heroImage" value="${escapeHtml(mod.heroImage)}" oninput="document.getElementById('prev-hero').src='/' + this.value.replace(/^\\.\\//,'') + '?t=' + Date.now()">
+                <label class="btn btn-sm btn-primary" style="margin:0">📁 แปลงรูปใส่ปกหลัก<input type="file" accept="image/*,.dds,.tga" style="display:none" onchange="uploadArtImage('f-heroImage', '${escapeHtml(mod.slug)}.webp', this.files[0], 1920, 'prev-hero')"></label>
               </div>
+              <img id="prev-hero" src="/${escapeHtml((mod.heroImage || '').replace(/^\.\//, ''))}?t=${Date.now()}" style="margin-top:8px;width:100%;max-height:110px;object-fit:cover;border-radius:6px;border:1px solid var(--border);background:#000" onerror="this.src='/assets/fallback.svg'">
             </div>
             <div>
               <label>คำอธิบายภาพหลัก (artworkAlt)</label>
@@ -659,7 +708,10 @@ ADMIN_HTML = r"""<!doctype html>
 
           <div class="grid-2" style="margin-top:12px">
             <div>
-              <label>ภาพตัวอย่างแกลเลอรี (screenshots — บรรทัดละ 1 พาธ)</label>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                <label style="margin:0">ภาพตัวอย่างแกลเลอรี (screenshots — บรรทัดละ 1 พาธ)</label>
+                <label class="btn btn-sm" style="margin:0">📁 เลือกรูปแปลงเป็น WebP เพิ่มเข้าแกลเลอรี<input type="file" accept="image/*,.dds,.tga" multiple style="display:none" onchange="uploadGalleryImages(this.files)"></label>
+              </div>
               <textarea id="f-screenshots">${escapeHtml((mod.screenshots || []).join('\n'))}</textarea>
             </div>
             <div>
@@ -678,6 +730,83 @@ ADMIN_HTML = r"""<!doctype html>
               <input type="text" id="f-previewVideoUrl" value="${escapeHtml(mod.previewVideoUrl)}">
             </div>
           </div>
+        </div>
+
+        <div class="card" style="border-color:#2f81f7">
+          <h2>
+            <span>🖼️ เครื่องมือแปลงไฟล์ภาพเป็น WebP (แปลงภาพสกิล / ภาพปก / ภาพย่อ / แกลเลอรี)</span>
+          </h2>
+          <div class="help-text" style="margin-bottom:10px">
+            รองรับไฟล์ <b>.png, .jpg, .jpeg, .dds, .tga, .bmp, .webp</b> แปลงด้วย Blender 5.3 โหมดสี <code>sRGB (Standard)</code> สีไม่เพี้ยน พร้อมย่อขนาดหรือพลิกภาพกลับหัวได้ในคลิกเดียว
+          </div>
+          <div class="grid-3">
+            <div>
+              <label>1. ประเภทและขนาดภาพที่จะแปลง</label>
+              <select id="conv-preset" onchange="onConvPresetChange()">
+                <option value="skill256">ไอคอนสกิลมาตรฐาน (จัตุรัส 256×256 px)</option>
+                <option value="skill128">ไอคอนสกิลขนาดเล็ก (จัตุรัส 128×128 px)</option>
+                <option value="hero1920">ภาพปกหลัก Hero Cover (กว้างไม่เกิน 1920 px)</option>
+                <option value="thumb720">ภาพย่อการ์ด Thumbnail (กว้างไม่เกิน 720 px)</option>
+                <option value="original">คงขนาดต้นฉบับ (Original Size)</option>
+                <option value="custom">กำหนดขนาดเอง (Custom Width × Height)</option>
+              </select>
+            </div>
+            <div>
+              <label>2. นำไปใส่ช่องไหนของม็อด "${escapeHtml(mod.name)}"</label>
+              <select id="conv-slot" onchange="onConvSlotChange()">
+                <option value="none">ไม่ผูกช่อง (แปลงเก็บใน assets/art/ หรือดาวน์โหลดเอง)</option>
+                <option value="skill_0">ใส่เป็น ไอคอนสกิล Q</option>
+                <option value="skill_1">ใส่เป็น ไอคอนสกิล W</option>
+                <option value="skill_2">ใส่เป็น ไอคอนสกิล E</option>
+                <option value="skill_3">ใส่เป็น ไอคอนสกิล R</option>
+                <option value="heroImage">ใส่เป็น ภาพปกหลัก (heroImage)</option>
+                <option value="thumbnail">ใส่เป็น ภาพย่อ (thumbnail)</option>
+                <option value="screenshots">เพิ่มต่อท้ายใน แกลเลอรี (screenshots)</option>
+              </select>
+            </div>
+            <div>
+              <label>3. ชื่อไฟล์ปลายทางใน assets/art/ (แก้ไขได้)</label>
+              <input type="text" id="conv-filename" placeholder="${escapeHtml(mod.slug)}-custom.webp">
+            </div>
+          </div>
+
+          <div id="conv-custom-dims" class="grid-2" style="margin-top:10px;display:none">
+            <div>
+              <label>ความกว้าง (Width px)</label>
+              <input type="text" id="conv-w" value="512">
+            </div>
+            <div>
+              <label>ความสูง (Height px)</label>
+              <input type="text" id="conv-h" value="512">
+            </div>
+          </div>
+
+          <div class="grid-3" style="margin-top:10px;align-items:end">
+            <div>
+              <label>คุณภาพ WebP (1-100, แนะนำ 92)</label>
+              <input type="text" id="conv-quality" value="92">
+            </div>
+            <div class="checkbox-row">
+              <label><input type="checkbox" id="conv-flip"> 🔃 พลิกภาพแนวตั้ง (สำหรับไฟล์ .dds จากเกมที่กลับหัว)</label>
+            </div>
+            <div>
+              <label>หรือวางพาธไฟล์ในเครื่องโดยตรง (เช่น C:\Users\...\skill_q.png)</label>
+              <div class="row">
+                <input type="text" id="conv-local-path" placeholder="วางพาธไฟล์จากในเครื่องแล้วกดแปลง...">
+                <button type="button" class="btn-primary btn-sm" onclick="convertFromLocalPath()">⚡ แปลงจากพาธ</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;padding:18px;border:2px dashed #388bfd;border-radius:8px;background:#0d1520;text-align:center">
+            <label class="btn btn-primary" style="cursor:pointer;font-size:14px;padding:10px 20px">
+              📂 คลิกเลือกไฟล์ภาพจากเครื่องเพื่อแปลงเป็น WebP (เลือกหลายไฟล์พร้อมกันได้)
+              <input type="file" id="conv-files" accept="image/*,.dds,.tga,.bmp" multiple style="display:none" onchange="runBatchConverter(this.files)">
+            </label>
+            <div class="help-text" style="margin-top:6px">เมื่อเลือกไฟล์แล้ว ระบบจะแปลงเป็น .webp ทันที พร้อมแสดงภาพตัวอย่างและปุ่มดาวน์โหลดด้านล่าง</div>
+          </div>
+
+          <div id="conv-results" style="margin-top:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px"></div>
         </div>
 
         <div class="card">
@@ -858,26 +987,188 @@ ADMIN_HTML = r"""<!doctype html>
         toast('กำลังแปลงและอัปเดตไอคอนสกิล (256x256 WebP)...', '#d29922');
         const b64 = await fileToBase64(file);
         const key = (document.getElementById(`sk-key-${idx}`).value || 'q').trim().toLowerCase();
-        const targetName = `${currentSlug}-skill_${key}.webp`;
-        const res = await api('/api/image/upload', { filename: targetName, base64: b64, size: 256 });
+        const curIcon = (document.getElementById(`sk-icon-${idx}`).value || '').trim().replace(/^\.\/assets\/art\//, '');
+        const targetName = curIcon && curIcon.endsWith('.webp') ? curIcon : `${currentSlug}-skill_${key}.webp`;
+        const isDds = file.name.toLowerCase().endsWith('.dds');
+        const res = await api('/api/image/upload', { filename: targetName, base64: b64, size: 256, flipY: isDds });
         document.getElementById(`sk-icon-${idx}`).value = res.path;
         document.getElementById(`sk-img-prev-${idx}`).src = '/' + res.path.replace(/^\.\//, '') + '?t=' + Date.now();
-        toast('อัปเดตไอคอนสกิลเรียบร้อย! กดบันทึกเพื่อเซฟ JSON', '#238636');
+        toast(`อัปเดตไอคอนสกิลเรียบร้อย (${res.width}x${res.height}, ${res.newSizeKB} KB)! กดบันทึกเพื่อเซฟ JSON`, '#238636');
       } catch (e) {
         toast('อัปโหลดไอคอนไม่สำเร็จ: ' + e.message, '#da3633');
       }
     }
 
-    async function uploadArtImage(inputId, targetName, file) {
+    async function uploadArtImage(inputId, targetName, file, maxWidth = 0, previewId = '') {
       if (!file) return;
       try {
         toast('กำลังแปลงรูปภาพเป็น WebP...', '#d29922');
         const b64 = await fileToBase64(file);
-        const res = await api('/api/image/upload', { filename: targetName, base64: b64, size: 0 });
+        const curVal = (document.getElementById(inputId).value || '').trim().replace(/^\.\/assets\/art\//, '');
+        const outName = (curVal && curVal.endsWith('.webp') && !curVal.includes('fallback')) ? curVal : targetName;
+        const res = await api('/api/image/upload', { filename: outName, base64: b64, maxWidth });
         document.getElementById(inputId).value = res.path;
-        toast('อัปเดตรูปภาพเรียบร้อย! กดบันทึกเพื่อเซฟ JSON', '#238636');
+        if (previewId && document.getElementById(previewId)) {
+          document.getElementById(previewId).src = '/' + res.path.replace(/^\.\//, '') + '?t=' + Date.now();
+        }
+        toast(`แปลงเป็น WebP เรียบร้อย (${res.width}x${res.height}, ${res.newSizeKB} KB)! กดบันทึกเพื่อเซฟ JSON`, '#238636');
       } catch (e) {
         toast('อัปโหลดรูปไม่สำเร็จ: ' + e.message, '#da3633');
+      }
+    }
+
+    async function uploadGalleryImages(files) {
+      if (!files || !files.length) return;
+      const box = document.getElementById('f-screenshots');
+      const lines = box.value.split('\n').map(s => s.trim()).filter(Boolean);
+      for (let i = 0; i < files.length; i++) {
+        const f = files[i];
+        try {
+          toast(`กำลังแปลงรูปแกลเลอรี (${i + 1}/${files.length}): ${f.name}...`, '#d29922');
+          const b64 = await fileToBase64(f);
+          const cleanStem = f.name.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9_-]+/g, '-');
+          const outName = `${currentSlug}-${cleanStem}.webp`;
+          const res = await api('/api/image/upload', { filename: outName, base64: b64, maxWidth: 1920 });
+          if (!lines.includes(res.path)) lines.push(res.path);
+        } catch (e) {
+          toast('แปลงรูปไม่สำเร็จ: ' + e.message, '#da3633');
+        }
+      }
+      box.value = lines.join('\n');
+      toast('แปลงและเพิ่มรูปเข้าแกลเลอรีเรียบร้อย! กดบันทึกเพื่อเซฟ JSON', '#238636');
+    }
+
+    function onConvPresetChange() {
+      const preset = document.getElementById('conv-preset').value;
+      document.getElementById('conv-custom-dims').style.display = preset === 'custom' ? 'grid' : 'none';
+    }
+
+    function onConvSlotChange() {
+      const slot = document.getElementById('conv-slot').value;
+      const presetEl = document.getElementById('conv-preset');
+      const fnameEl = document.getElementById('conv-filename');
+      if (slot.startsWith('skill_')) {
+        const idx = parseInt(slot.split('_')[1], 10);
+        const key = (document.getElementById(`sk-key-${idx}`)?.value || 'q').trim().toLowerCase();
+        const cur = (document.getElementById(`sk-icon-${idx}`)?.value || '').trim().replace(/^\.\/assets\/art\//, '');
+        presetEl.value = 'skill256';
+        fnameEl.value = (cur && cur.endsWith('.webp')) ? cur : `${currentSlug}-skill_${key}.webp`;
+      } else if (slot === 'heroImage') {
+        presetEl.value = 'hero1920';
+        fnameEl.value = `${currentSlug}.webp`;
+      } else if (slot === 'thumbnail') {
+        presetEl.value = 'thumb720';
+        fnameEl.value = `${currentSlug}-thumb.webp`;
+      } else if (slot === 'screenshots') {
+        presetEl.value = 'hero1920';
+        fnameEl.value = '';
+      }
+      onConvPresetChange();
+    }
+
+    function getConvOptions(defaultStem) {
+      const preset = document.getElementById('conv-preset').value;
+      const slot = document.getElementById('conv-slot').value;
+      let fname = document.getElementById('conv-filename').value.trim();
+      if (!fname) {
+        fname = `${currentSlug || 'image'}-${defaultStem}.webp`;
+      }
+      if (!fname.toLowerCase().endsWith('.webp')) fname += '.webp';
+      const quality = parseInt(document.getElementById('conv-quality').value || '92', 10) || 92;
+      const flipY = document.getElementById('conv-flip').checked;
+      let size = 0, maxWidth = 0, customW = 0, customH = 0;
+      if (preset === 'skill256') size = 256;
+      else if (preset === 'skill128') size = 128;
+      else if (preset === 'hero1920') maxWidth = 1920;
+      else if (preset === 'thumb720') maxWidth = 720;
+      else if (preset === 'custom') {
+        customW = parseInt(document.getElementById('conv-w').value || '0', 10) || 0;
+        customH = parseInt(document.getElementById('conv-h').value || '0', 10) || 0;
+      }
+      return { filename: fname, size, maxWidth, customW, customH, flipY, quality, slot };
+    }
+
+    function applyConvertedToSlot(slot, webPath) {
+      if (slot.startsWith('skill_')) {
+        const idx = parseInt(slot.split('_')[1], 10);
+        const inp = document.getElementById(`sk-icon-${idx}`);
+        const img = document.getElementById(`sk-img-prev-${idx}`);
+        if (inp) inp.value = webPath;
+        if (img) img.src = '/' + webPath.replace(/^\.\//, '') + '?t=' + Date.now();
+      } else if (slot === 'heroImage') {
+        document.getElementById('f-heroImage').value = webPath;
+        const p = document.getElementById('prev-hero');
+        if (p) p.src = '/' + webPath.replace(/^\.\//, '') + '?t=' + Date.now();
+      } else if (slot === 'thumbnail') {
+        document.getElementById('f-thumbnail').value = webPath;
+        const p = document.getElementById('prev-thumb');
+        if (p) p.src = '/' + webPath.replace(/^\.\//, '') + '?t=' + Date.now();
+      } else if (slot === 'screenshots') {
+        const box = document.getElementById('f-screenshots');
+        const lines = box.value.split('\n').map(s => s.trim()).filter(Boolean);
+        if (!lines.includes(webPath)) lines.push(webPath);
+        box.value = lines.join('\n');
+      }
+    }
+
+    function appendConvResultCard(res, sourceLabel) {
+      const container = document.getElementById('conv-results');
+      const url = '/' + res.path.replace(/^\.\//, '') + '?t=' + Date.now();
+      const card = document.createElement('div');
+      card.style.cssText = 'border:1px solid var(--border);border-radius:8px;padding:10px;background:#11161d';
+      card.innerHTML = `
+        <img src="${url}" style="width:100%;height:150px;object-fit:contain;background:#000;border-radius:6px;border:1px solid var(--border)">
+        <div style="margin-top:8px;font-weight:600;font-size:13px;word-break:break-all">${escapeHtml(res.path)}</div>
+        <div class="help-text">ขนาด: <b>${res.width}×${res.height} px</b> · ไฟล์: <b>${res.oldSizeKB} KB → ${res.newSizeKB} KB</b></div>
+        <div class="row" style="margin-top:8px">
+          <button type="button" class="btn-sm" onclick="navigator.clipboard.writeText('${escapeHtml(res.path)}');toast('คัดลอกพาธแล้ว')">📋 คัดลอกพาธ</button>
+          <a class="btn btn-sm btn-primary" href="${url}" download="${escapeHtml(res.path.split('/').pop())}">⬇️ โหลด .webp</a>
+        </div>
+      `;
+      container.prepend(card);
+    }
+
+    async function runBatchConverter(files) {
+      if (!files || !files.length) return;
+      for (let i = 0; i < files.length; i++) {
+        const f = files[i];
+        try {
+          if (f.name.toLowerCase().endsWith('.dds')) {
+            document.getElementById('conv-flip').checked = true;
+          }
+          const stem = f.name.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9_-]+/g, '-');
+          const opts = getConvOptions(stem);
+          if (files.length > 1) {
+            opts.filename = `${currentSlug || 'img'}-${stem}.webp`;
+          }
+          toast(`กำลังแปลงไฟล์เป็น WebP (${i + 1}/${files.length}): ${f.name}...`, '#d29922');
+          const b64 = await fileToBase64(f);
+          const res = await api('/api/image/upload', { ...opts, base64: b64 });
+          applyConvertedToSlot(opts.slot, res.path);
+          appendConvResultCard(res, f.name);
+          toast(`แปลง ${f.name} -> ${res.path} สำเร็จ! (${res.newSizeKB} KB)`, '#238636');
+        } catch (e) {
+          toast('แปลงไฟล์ไม่สำเร็จ: ' + e.message, '#da3633');
+        }
+      }
+    }
+
+    async function convertFromLocalPath() {
+      const localPath = document.getElementById('conv-local-path').value.trim().replace(/^"|"$/g, '');
+      if (!localPath) return alert('กรุณาวางพาธไฟล์ในเครื่องก่อนครับ');
+      try {
+        if (localPath.toLowerCase().endsWith('.dds')) {
+          document.getElementById('conv-flip').checked = true;
+        }
+        const baseName = localPath.split(/[\\/]/).pop().replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9_-]+/g, '-');
+        const opts = getConvOptions(baseName);
+        toast('กำลังแปลงไฟล์จากพาธในเครื่องเป็น WebP...', '#d29922');
+        const res = await api('/api/image/upload', { ...opts, localPath });
+        applyConvertedToSlot(opts.slot, res.path);
+        appendConvResultCard(res, localPath);
+        toast(`แปลงเป็น WebP สำเร็จ: ${res.path} (${res.newSizeKB} KB)!`, '#238636');
+      } catch (e) {
+        toast('แปลงไฟล์จากพาธไม่สำเร็จ: ' + e.message, '#da3633');
       }
     }
 
@@ -1107,22 +1398,71 @@ class AdminRequestHandler(http.server.SimpleHTTPRequestHandler):
         self.send_json({"ok": True})
 
     def handle_image_upload(self, body: dict) -> None:
-        filename = Path(body.get("filename") or "image.webp").name
-        if not filename.lower().endswith(".webp"):
-            filename = Path(filename).stem + ".webp"
-        b64 = body.get("base64") or ""
+        raw_filename = (body.get("filename") or "image.webp").strip().replace("\\", "/").lstrip("./")
+        if raw_filename.startswith("assets/art/"):
+            raw_filename = raw_filename[len("assets/art/"):]
+        parts = [p for p in raw_filename.split("/") if p and p not in (".", "..")]
+        rel_subpath = "/".join(parts) if parts else "image.webp"
+        if not rel_subpath.lower().endswith(".webp"):
+            rel_subpath = str(Path(rel_subpath).with_suffix(".webp")).replace("\\", "/")
+
         size = int(body.get("size") or 0)
-        raw = base64.b64decode(b64)
+        max_width = int(body.get("maxWidth") or 0)
+        custom_w = int(body.get("customW") or 0)
+        custom_h = int(body.get("customH") or 0)
+        flip_y = bool(body.get("flipY", False))
+        quality = int(body.get("quality") or 92)
+        local_path_str = (body.get("localPath") or "").strip().strip('"')
+
         ART_DIR.mkdir(parents=True, exist_ok=True)
-        dst_path = ART_DIR / filename
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".img") as tmp:
-            tmp.write(raw)
-            tmp_path = Path(tmp.name)
-        try:
-            convert_or_flip_webp_with_blender(tmp_path, dst_path, size=size if size > 0 else None, flip_y=False)
-        finally:
-            tmp_path.unlink(missing_ok=True)
-        self.send_json({"ok": True, "path": f"./assets/art/{filename}"})
+        dst_path = ART_DIR / rel_subpath
+        dst_path.parent.mkdir(parents=True, exist_ok=True)
+
+        if local_path_str:
+            src_local = Path(local_path_str)
+            if not src_local.exists():
+                raise ValueError(f"ไม่พบไฟล์ในเครื่อง: {local_path_str}")
+            old_kb = round(src_local.stat().st_size / 1024.0, 1)
+            out_w, out_h = convert_or_flip_webp_with_blender(
+                src_local,
+                dst_path,
+                size=size if size > 0 else None,
+                max_width=max_width if max_width > 0 else None,
+                custom_w=custom_w if custom_w > 0 else None,
+                custom_h=custom_h if custom_h > 0 else None,
+                flip_y=flip_y,
+                quality=quality,
+            )
+        else:
+            b64 = body.get("base64") or ""
+            raw = base64.b64decode(b64)
+            old_kb = round(len(raw) / 1024.0, 1)
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".img") as tmp:
+                tmp.write(raw)
+                tmp_path = Path(tmp.name)
+            try:
+                out_w, out_h = convert_or_flip_webp_with_blender(
+                    tmp_path,
+                    dst_path,
+                    size=size if size > 0 else None,
+                    max_width=max_width if max_width > 0 else None,
+                    custom_w=custom_w if custom_w > 0 else None,
+                    custom_h=custom_h if custom_h > 0 else None,
+                    flip_y=flip_y,
+                    quality=quality,
+                )
+            finally:
+                tmp_path.unlink(missing_ok=True)
+
+        new_kb = round(dst_path.stat().st_size / 1024.0, 1) if dst_path.exists() else 0
+        self.send_json({
+            "ok": True,
+            "path": f"./assets/art/{rel_subpath}",
+            "width": out_w,
+            "height": out_h,
+            "oldSizeKB": old_kb,
+            "newSizeKB": new_kb,
+        })
 
     def handle_image_flip(self, body: dict) -> None:
         rel = (body.get("path") or "").strip().lstrip("./")

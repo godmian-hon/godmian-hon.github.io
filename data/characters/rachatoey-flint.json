@@ -9,15 +9,14 @@
   "version": "0.7.12",
   "fileSize": "14.5 MB",
   "featured": true,
-  "concept": false,
+  "concept": true,
   "thumbnail": "./assets/art/rachatoey-thumb.webp",
   "heroImage": "./assets/art/rachatoey.webp",
   "artworkAlt": "ราชาเต้ย ราชาผู้ไม่หวั่นแม้วันมามาก ทำตัวชิลได้ทุกสถานการณ์",
   "screenshots": [
     "./assets/art/rachatoey.webp",
     "./assets/art/rachatoey-rtx.webp",
-    "./assets/art/rachatoey-havaianas.webp",
-    "./assets/art/rachatoey-ingame.webp"
+    "./assets/art/rachatoey-havaianas.webp"
   ],
   "screenshotAlts": [
     "「ราชาเต้ย」สหายร่วมรบกับผู้จัดทำสมัยมหาลัย ผู้ปลุกพลังต่างโลกจากจิตใต้สำนึก",

@@ -8,7 +8,7 @@
   "longDescription": "รายละเอียดเต็มของ บากิ (Rampage)",
   "version": "0.1.0",
   "fileSize": "",
-  "featured": false,
+  "featured": true,
   "concept": false,
   "thumbnail": "./assets/art/baki-thumb.webp",
   "heroImage": "./assets/art/baki.webp",

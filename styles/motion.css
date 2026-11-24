@@ -19,15 +19,22 @@
     background-image: linear-gradient(105deg, #d8e5ff, var(--scene-color, #95baff) 50%, #9aaaf9);
   }
   .hero-atmosphere {
-    display: block; position: absolute; inset: 0; z-index: -1;
+    display: block; position: absolute; inset: 0; z-index: 0;
     overflow: hidden; pointer-events: none; color: var(--scene-color, var(--ice));
   }
   .hero-atmosphere i {
-    position: absolute; width: 3px; height: 3px; border-radius: 50%;
-    background: currentColor; box-shadow: 0 0 8px 1px currentColor;
-    opacity: 0; animation: drift-light 3.8s ease-out both;
+    position: absolute; width: var(--size, 3.5px); height: var(--size, 3.5px); border-radius: 50%;
+    background: #fff6e5;
+    box-shadow: 0 0 6px 1px #ffb347, 0 0 14px 3px currentColor;
+    opacity: 0; animation: drift-light 4.2s ease-in-out infinite;
   }
-  .hero-atmosphere i:nth-child(3n) { width: 2px; height: 5px; border-radius: 70%; }
+  .hero-atmosphere i:nth-child(3n) {
+    width: calc(var(--size, 3.5px) * 0.75); height: calc(var(--size, 3.5px) * 1.7); border-radius: 70%;
+  }
+  .hero-atmosphere i:nth-child(2n) {
+    background: currentColor;
+    box-shadow: 0 0 8px 2px currentColor, 0 0 16px 3px #ff7b2980;
+  }
   .scroll-cue .icon { animation: scroll-hint 1.45s .7s 2 ease-in-out; }
   .btn, .round, .detail-icon-btn, .detail-download {
     transition: transform .2s ease-out, background-color .2s, border-color .2s, box-shadow .2s;
@@ -108,9 +115,10 @@
   to { opacity: 1; transform: none; }
 }
 @keyframes drift-light {
-  0% { opacity: 0; transform: translate(0, 16px) rotate(18deg); }
-  20% { opacity: .8; }
-  100% { opacity: 0; transform: translate(var(--drift), -65px) rotate(40deg); }
+  0% { opacity: 0; transform: translate(0, 18px) scale(.75) rotate(18deg); }
+  22% { opacity: .92; }
+  65% { opacity: .7; }
+  100% { opacity: 0; transform: translate(var(--drift, 24px), var(--rise, -85px)) scale(1.1) rotate(42deg); }
 }
 @keyframes scroll-hint { 50% { transform: translateY(3px); } }
 @keyframes viewer-in {

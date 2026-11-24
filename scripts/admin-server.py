@@ -1307,7 +1307,7 @@ class AdminRequestHandler(http.server.SimpleHTTPRequestHandler):
             "longDescription": f"รายละเอียดเต็มของ {name}",
             "version": "0.1.0",
             "fileSize": "",
-            "featured": False,
+            "featured": True,
             "concept": False,
             "thumbnail": "./assets/fallback.svg",
             "heroImage": "./assets/fallback.svg",

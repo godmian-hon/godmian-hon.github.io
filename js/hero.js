@@ -3,8 +3,8 @@ import { animate, enableSwipe, followPointer, imageSwitcher } from './motion.js'
 
 export function initializeHero(mods) {
   const featured = mods.filter(mod => mod.featured);
-  const slides = [...featured].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-  if (!slides.length && mods.length) slides.push(mods[0]);
+  const pool = featured.length > 1 ? featured : mods;
+  const slides = [...pool].sort((a, b) => Number(b.featured) - Number(a.featured) || b.createdAt.localeCompare(a.createdAt));
   const controls = document.getElementById('hero-controls');
   const spotlightLink = document.getElementById('spotlight-link');
   if (!slides.length) {
@@ -31,12 +31,15 @@ export function initializeHero(mods) {
     atmosphere.replaceChildren();
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const motes = document.createDocumentFragment();
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < 28; i++) {
       const mote = document.createElement('i');
-      mote.style.left = (28 + (i * 47) % 71) + '%';
-      mote.style.top = (16 + (i * 29) % 81) + '%';
-      mote.style.setProperty('--drift', (16 + i % 5 * 11) + 'px');
-      mote.style.animationDelay = i % 6 * 95 + 'ms';
+      mote.style.left = (8 + (i * 37) % 88) + '%';
+      mote.style.top = (18 + (i * 29) % 78) + '%';
+      mote.style.setProperty('--drift', ((i % 2 ? 1 : -1) * (14 + (i % 5) * 11)) + 'px');
+      mote.style.setProperty('--rise', (-65 - (i % 4) * 22) + 'px');
+      mote.style.setProperty('--size', (2.5 + (i % 4) * 1.1) + 'px');
+      mote.style.animationDuration = (3.4 + (i % 5) * 0.65) + 's';
+      mote.style.animationDelay = -(i * 0.37) + 's';
       motes.append(mote);
     }
     atmosphere.append(motes);

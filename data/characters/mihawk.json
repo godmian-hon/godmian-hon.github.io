@@ -8,7 +8,7 @@
   "longDescription": "รายละเอียดเต็มของ ตาเหยี่ยว (Solstice)",
   "version": "0.1.0",
   "fileSize": "",
-  "featured": false,
+  "featured": true,
   "concept": true,
   "thumbnail": "./assets/art/mihawk-thumb.webp",
   "heroImage": "./assets/art/mihawk.webp",

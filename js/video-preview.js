@@ -43,7 +43,10 @@ export function initializeVideoPreview() {
     }, 180);
   }
 
+  const mobileQuery = matchMedia('(max-width: 768px), (hover: none) and (pointer: coarse)');
+
   function follow(event) {
+    if (mobileQuery.matches) { hide(); return; }
     const item = event.pointerType === 'mouse' && event.target.closest?.('.mod-item[data-video], .skill-card[data-title]');
     if (!item || item.getAttribute('aria-expanded') === 'true') { hide(); return; }
     pointerX = event.clientX;
@@ -52,6 +55,7 @@ export function initializeVideoPreview() {
     if (entering) {
       clearTimeout(cleanup);
       active = item;
+      card.classList.toggle('is-skill', item.classList.contains('skill-card'));
       title.textContent = item.dataset.title || '';
       title.hidden = !title.textContent;
       description.textContent = item.dataset.desc || '';

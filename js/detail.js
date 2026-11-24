@@ -201,13 +201,14 @@ export function renderDetail(mod, container) {
       panel.hidden = true;
       trigger.setAttribute("aria-controls", panel.id);
       trigger.setAttribute("aria-expanded", "false");
+      const isMobile = () => matchMedia("(max-width: 768px), (hover: none) and (pointer: coarse)").matches;
       const show = open => {
         if (open === !panel.hidden) return;
         panel.hidden = !open;
         trigger.setAttribute("aria-expanded", String(open));
         if (open) {
           trackSkillPreview(mod, skill);
-          if (skill.clip) {
+          if (skill.clip && !isMobile()) {
             const player = videoPlayer(skill.clip, skill.name);
             player.loop = true;
             panel.append(player);
@@ -233,8 +234,10 @@ export function renderDetail(mod, container) {
     section.append(grid);
     article.append(section);
   }
-  if (mod.preview || mod.video) {
+  const mobileNoVideo = matchMedia("(max-width: 768px), (hover: none) and (pointer: coarse)").matches;
+  if (!mobileNoVideo && (mod.preview || mod.video)) {
     const section = textSection("วิดีโอพรีวิว");
+    section.classList.add("detail-video-section");
     if (mod.preview) {
       const player = videoPlayer(mod.preview, mod.name);
       player.poster = mod.heroImage;

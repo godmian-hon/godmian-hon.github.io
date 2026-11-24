@@ -338,6 +338,11 @@ def interactive_wizard(ffmpeg_exe: str | None) -> None:
 
 
 def main() -> int:
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
     ap = argparse.ArgumentParser(description="GodMian Mod & Skill Video Updater")
     ap.add_argument("--auto", action="store_true", help="รันซิงก์อัตโนมัติโดยไม่ถามโต้ตอบ")
     ap.add_argument("--refresh", action="store_true", help="บังคับดาวน์โหลดคลิปสกิลจาก Google Drive ใหม่ทั้งหมด")

@@ -6,8 +6,8 @@
   "category": "Hero Skin",
   "description": "สกินราชาเต้ยสำหรับ Flint Beastwood ยิงกระสุนแสงจากปลายนิ้ว ขว้างการ์ดจอ RTX ระเบิดไฟฟ้า และปารองเท้าแตะปลิดชีพ",
   "longDescription": "「ราชาเต้ย」สหายร่วมรบกับผู้จัดทำสมัยมหาลัย ผู้ปลุกพลังต่างโลกจากจิตใต้สำนึก แม้เจ้าตัวจะแค่ชอบสีเขียวมิ้นต์เฉยๆ แต่พลังกลับตื่นขึ้นอย่างลึกลับในสมรภูมิ สกิล 1 ปาการ์ดจอระเบิดไฟฟ้า ฟาด RTX ปล่อยคลื่นสายฟ้าสีมิ้นต์ทอง อัลติเมต ปารองเท้าแตะปลิดชีพ ควงสว่านกระแทกหัวเกรียน พร้อมโมเดล 3 มิติใน Heroes of Newerth Reborn และเอฟเฟกต์แสงปลายนิ้วครบชุด",
-  "version": "0.7.12",
-  "fileSize": "14.5 MB",
+  "version": "0.7.13",
+  "fileSize": "14.3 MB",
   "featured": true,
   "concept": true,
   "thumbnail": "./assets/art/rachatoey-thumb.webp",
@@ -27,7 +27,7 @@
   ],
   "downloadUrl": "https://drive.google.com/file/d/1TDhRIroY48koVJleTX44kBYwQGp6qch4/view?usp=sharing",
   "installationGuide": [
-    "ดาวน์โหลดไฟล์แพ็กเกจ CT_FingerGun_Flint_v0.7.12.honmod มาไว้ในเครื่อง",
+    "ดาวน์โหลดไฟล์แพ็กเกจ CT_FingerGun_Flint_v0.7.13.honmod มาไว้ในเครื่อง",
     "เปิดโปรแกรมจัดการม็อด Newerth Forge สำหรับ Heroes of Newerth Reborn",
     "ลากไฟล์ .honmod เข้าสู่รายการม็อดหรือกด Add Mod แล้วติ๊กเปิดใช้งาน Finger Gun (Flint Beastwood)",
     "กด Apply Mods แล้วเข้าเกมเลือกฮีโร่ Flint Beastwood เพื่อทดสอบท่ายิงนิ้ว การ์ดจอ RTX และอัลติรองเท้าแตะ"
@@ -42,7 +42,7 @@
     }
   ],
   "createdAt": "2026-11-25",
-  "updatedAt": "2026-11-25",
+  "updatedAt": "2026-11-24",
   "skills": [
     {
       "key": "Q",

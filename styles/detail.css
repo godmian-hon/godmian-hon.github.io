@@ -129,8 +129,15 @@ button.skill-card:hover, button.skill-card[aria-expanded="true"] { border-color:
 .skill-grid:has(.skill-preview:not([hidden])) { grid-template-rows: auto auto; }
 .skill-entry:has(.skill-preview:not([hidden])) { display: contents; }
 .skill-entry .skill-card { grid-row: 1; }
-.skill-preview { grid-column: 1 / -1; grid-row: 2; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.skill-preview { grid-column: 1 / -1; grid-row: 2; padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.skill-preview .mod-video { max-width: 27rem; aspect-ratio: 1 / 1; object-fit: cover; margin-bottom: .6rem; }
 .skill-preview h3 { margin: .5rem 0; }
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
+  .skill-preview .mod-video,
+  .detail-video-section {
+    display: none !important;
+  }
+}
 .main-preview { position: relative; }
 .main-preview video { pointer-events: none; }
 .preview-sound { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: flex-end; width: 100%; padding: .75rem; border: 0; border-radius: 10px; background: transparent; color: white; cursor: pointer; touch-action: manipulation; }

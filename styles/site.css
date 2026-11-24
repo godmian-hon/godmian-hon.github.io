@@ -325,7 +325,7 @@ section[id], #main-content { scroll-margin-top: var(--header-height); }
   inset: 0 auto auto 0;
   z-index: 100;
   pointer-events: none;
-  width: min(21rem, calc(100vw - 16px), 98vh);
+  width: min(26rem, calc(100vw - 16px), 94vh);
   max-height: calc(100vh - 16px);
   box-sizing: border-box;
   overflow: hidden;
@@ -338,10 +338,17 @@ section[id], #main-content { scroll-margin-top: var(--header-height); }
   visibility: hidden;
   transition: opacity .16s ease, visibility 0s .16s;
 }
+.cursor-preview.is-skill {
+  width: min(27rem, calc(100vw - 20px), calc(100vh - 140px));
+}
 .cursor-preview.visible { opacity: 1; visibility: visible; transition-delay: 0s; }
-.cursor-preview video { display: block; width: 100%; aspect-ratio: 2.39; object-fit: contain; background: #090909; }
-.cursor-preview p { margin: 12px 15px; font-size: .9rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.cursor-preview video { display: block; width: 100%; aspect-ratio: 2.39; object-fit: cover; background: #090909; }
+.cursor-preview.is-skill video { aspect-ratio: 1 / 1; object-fit: cover; }
+.cursor-preview p { margin: 12px 15px; font-size: .92rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .cursor-preview { transition: none; } }
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
+  .cursor-preview { display: none !important; }
+}
 
 .cursor-preview strong:not([hidden]) { display: block; margin: 12px 15px 0; color: #ffe0aa; }
 .cursor-preview strong:not([hidden]) + p { display: block; margin-top: 4px; }

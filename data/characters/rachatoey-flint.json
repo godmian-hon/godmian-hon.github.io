@@ -27,12 +27,7 @@
     "โมเดล 3 มิติใน Heroes of Newerth Reborn แสงปลายนิ้ว"
   ],
   "downloadUrl": "https://github.com/godmian-hon/godmian-hon.github.io/releases/download/rachatoey-v0.7.13/CT_FingerGun_Flint_v0.7.13.honmod",
-  "installationGuide": [
-    "ดาวน์โหลดไฟล์แพ็กเกจ CT_FingerGun_Flint_v0.7.13.honmod มาไว้ในเครื่อง",
-    "เปิดโปรแกรมจัดการม็อด Newerth Forge สำหรับ Heroes of Newerth Reborn",
-    "ลากไฟล์ .honmod เข้าสู่รายการม็อดหรือกด Add Mod แล้วติ๊กเปิดใช้งาน Finger Gun (Flint Beastwood)",
-    "กด Apply Mods แล้วเข้าเกมเลือกฮีโร่ Flint Beastwood เพื่อทดสอบท่ายิงนิ้ว การ์ดจอ RTX และอัลติรองเท้าแตะ"
-  ],
+  "installationGuide": [],
   "changelog": [
     {
       "version": "0.7.0",

@@ -1,6 +1,14 @@
 import { element, humanDate, icon, makeImage } from "./ui.js";
 import { enableSwipe, imageSwitcher, revealOnScroll } from "./motion.js";
-import { trackGalleryOpen, trackModDownload, trackSkillPreview, trackVideoSoundToggle } from "./analytics.js";
+import { trackGalleryOpen, trackLauncherDownload, trackModDownload, trackSkillPreview, trackVideoSoundToggle } from "./analytics.js";
+
+const NEWERTH_FORGE_URL = "https://github.com/KRAT0Sz/mod-launcher/releases/download/1.8.2/Newerth.Forge.Setup.1.8.2.exe";
+const INSTALL_GUIDE_VIDEO = "./assets/video/install-guide.mp4";
+const SHARED_INSTALL_STEPS = [
+  "ดาวน์โหลดและติดตั้งโปรแกรม Newerth Forge (ตัวจัดการม็อดสำหรับเอาไฟล์ม็อดเข้าสู่ตัวเกม Heroes of Newerth Reborn)",
+  "ดาวน์โหลดไฟล์ม็อด (.honmod) ของตัวละครนี้มาไว้ในเครื่อง (ไม่ต้องแตกไฟล์)",
+  "เปิดโปรแกรม Newerth Forge ลากไฟล์ .honmod เข้าไปในรายการ (หรือกด Add Mod) ติ๊กเปิดสวิตช์ม็อด แล้วกด Apply Mods ตามคลิปด้านล่าง",
+];
 
 let openDialog = null;
 let stopReveal;
@@ -303,8 +311,19 @@ export function renderDetail(mod, container) {
   }
   const notes = element("div", "detail-notes");
   const installation = textSection("วิธีติดตั้ง");
-  installation.append(mod.installationGuide.length ? textList(mod.installationGuide, "ol") :
-    element("p", "", mod.driveLinks ? "ยังไม่มีคำแนะนำการติดตั้ง" : "วิธีติดตั้งจะตามมาเมื่อเปิดให้ดาวน์โหลดไฟล์ม็อด"));
+  const launcherBox = element("div", "install-launcher-box");
+  const launcherText = element("p", "install-launcher-desc", "ใช้โปรแกรม Newerth Forge เป็นตัว Launcher สำหรับลงไฟล์ม็อด (.honmod) เข้าสู่ตัวเกม Heroes of Newerth Reborn");
+  const launcherBtn = driveLink("ดาวน์โหลด Newerth Forge (Launcher)", NEWERTH_FORGE_URL, "btn btn-primary detail-download install-launcher-btn");
+  launcherBtn.prepend(icon("download"));
+  launcherBtn.addEventListener("click", () => trackLauncherDownload(mod));
+  launcherBox.append(launcherText, launcherBtn);
+  installation.append(launcherBox, textList(SHARED_INSTALL_STEPS, "ol"));
+  const guideVideoWrap = element("div", "install-video-wrap");
+  const guideVideo = videoPlayer(INSTALL_GUIDE_VIDEO, "วิดีโอสอนวิธีติดตั้งม็อดด้วย Newerth Forge");
+  guideVideo.loop = true;
+  guideVideo.controls = true;
+  guideVideoWrap.append(guideVideo);
+  installation.append(guideVideoWrap);
   const history = textSection("ประวัติการอัปเดต");
   if (!mod.changelog.length) history.append(element("p", "", "ยังไม่มีประวัติการอัปเดต"));
   for (const change of mod.changelog) {

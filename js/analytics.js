@@ -70,3 +70,11 @@ export function trackVideoSoundToggle(mod, muted) {
     sound_state: muted ? 'muted' : 'unmuted',
   });
 }
+
+export function trackLauncherDownload(mod) {
+  trackEvent('launcher_download', {
+    ...modParams(mod),
+    launcher_name: 'Newerth Forge 1.8.2',
+    link_url: 'https://github.com/KRAT0Sz/mod-launcher/releases/download/1.8.2/Newerth.Forge.Setup.1.8.2.exe',
+  });
+}

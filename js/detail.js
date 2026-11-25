@@ -122,12 +122,31 @@ function summary(mod) {
     item.append(element("dt", "", label), element("dd", "", value));
     metadata.append(item);
   }
+  if (mod.driveLinks) {
+    const dlItem = element("div");
+    dlItem.dataset.downloadSlug = mod.slug;
+    dlItem.hidden = typeof mod.downloadCount !== "number";
+    const dlDd = element("dd", "download-count-value", typeof mod.downloadCount === "number" ? mod.downloadCount.toLocaleString("th-TH") + " ครั้ง" : "0 ครั้ง");
+    dlItem.append(element("dt", "", "ดาวน์โหลด"), dlDd);
+    metadata.append(dlItem);
+  }
   panel.append(metadata);
   if (mod.driveLinks) {
     const links = element("div", "detail-downloads");
     const download = driveLink("Download mod", mod.driveLinks.download, "btn btn-primary detail-download");
     download.prepend(icon("download"));
-    download.addEventListener("click", () => trackModDownload(mod));
+    download.addEventListener("click", () => {
+      trackModDownload(mod);
+      if (typeof mod.downloadCount === "number") {
+        mod.downloadCount += 1;
+        const formatted = mod.downloadCount.toLocaleString("th-TH") + " ครั้ง";
+        document.querySelectorAll(`[data-download-slug="${mod.slug}"]`).forEach(node => {
+          const numNode = node.querySelector(".download-count-value") || node;
+          numNode.textContent = formatted;
+          node.hidden = false;
+        });
+      }
+    });
     links.append(download);
     panel.append(links);
   } else {

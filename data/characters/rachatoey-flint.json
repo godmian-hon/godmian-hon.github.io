@@ -10,7 +10,7 @@
   "fileSize": "14.3 MB",
   "enabled": true,
   "featured": true,
-  "concept": true,
+  "concept": false,
   "thumbnail": "./assets/art/rachatoey-thumb.webp",
   "heroImage": "./assets/art/rachatoey.webp",
   "artworkAlt": "ราชาเต้ย ราชาผู้ไม่หวั่นแม้วันมามาก ทำตัวชิลได้ทุกสถานการณ์",
@@ -26,7 +26,7 @@
     "อัลติเมต ปารองเท้าแตะปลิดชีพ ควงสว่าน กระแทกหัวเกรียน",
     "โมเดล 3 มิติใน Heroes of Newerth Reborn แสงปลายนิ้ว"
   ],
-  "downloadUrl": "https://drive.google.com/file/d/1TDhRIroY48koVJleTX44kBYwQGp6qch4/view?usp=sharing",
+  "downloadUrl": "https://github.com/godmian-hon/godmian-hon.github.io/releases/download/rachatoey-v0.7.13/CT_FingerGun_Flint_v0.7.13.honmod",
   "installationGuide": [
     "ดาวน์โหลดไฟล์แพ็กเกจ CT_FingerGun_Flint_v0.7.13.honmod มาไว้ในเครื่อง",
     "เปิดโปรแกรมจัดการม็อด Newerth Forge สำหรับ Heroes of Newerth Reborn",

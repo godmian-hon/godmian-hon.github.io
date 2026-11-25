@@ -77,6 +77,12 @@ export function modCard(mod, isEditorial = false) {
   }
   if (mod.version) meta.append(element('span', 'card-version', 'v' + mod.version));
   if (mod.concept) meta.append(element('span', 'concept-note', 'ภาพคอนเซปต์'));
+  const dlBadge = element('span', 'card-downloads');
+  dlBadge.dataset.downloadSlug = mod.slug;
+  dlBadge.hidden = typeof mod.downloadCount !== 'number';
+  const dlVal = element('span', 'download-count-value', typeof mod.downloadCount === 'number' ? mod.downloadCount.toLocaleString('th-TH') + ' ครั้ง' : '');
+  dlBadge.append(icon('download'), dlVal);
+  meta.append(dlBadge);
   const title = element('h3', '', mod.name);
   const subtitle = mod.name.match(/^(.+?)\s+\(([^()]+)\)$/u);
   if (subtitle) title.replaceChildren(document.createTextNode(subtitle[1] + ' '), element('span', 'card-subtitle', '(' + subtitle[2] + ')'));

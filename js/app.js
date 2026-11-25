@@ -1,4 +1,4 @@
-import { loadMods } from './data.js';
+import { loadMods, fetchReleaseDownloadCounts, updateDownloadCountBadges } from './data.js';
 import { renderDetail, leaveDetail } from './detail.js';
 import { initializeHero } from './hero.js';
 import { initializeCollection } from './collection.js';
@@ -116,6 +116,7 @@ try {
 }
 dataReady = true;
 renderRoute(true);
+fetchReleaseDownloadCounts(mods).then(() => updateDownloadCountBadges(mods)).catch(() => {});
 let traversing = false;
 window.addEventListener('popstate', () => { traversing = true; });
 window.addEventListener('hashchange', () => {

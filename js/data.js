@@ -20,7 +20,32 @@ function isoDate(value) {
   return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === day ? day : "";
 }
 
+export function getGithubReleaseLink(value) {
+  if (!text(value)) return null;
+  let url;
+  try {
+    url = new URL(text(value));
+  } catch {
+    return null;
+  }
+  if (url.protocol !== "https:" || url.username || url.password || url.port || url.hostname !== "github.com") return null;
+  const match = url.pathname.match(/^\/([A-Za-z0-9_.-]+)\/([A-Za-z0-9_.-]+)\/releases\/download\/([^/]+)\/([^/]+)$/);
+  if (!match) return null;
+  const [, owner, repo, tag, filename] = match;
+  return {
+    provider: "github",
+    owner,
+    repo,
+    tag: decodeURIComponent(tag),
+    filename: decodeURIComponent(filename),
+    download: url.href,
+    view: `https://github.com/${owner}/${repo}/releases/tag/${tag}`,
+  };
+}
+
 export function getDriveLinks(value) {
+  const gh = getGithubReleaseLink(value);
+  if (gh) return gh;
   if (!text(value)) return null;
   let url;
   try {
@@ -47,12 +72,84 @@ export function getDriveLinks(value) {
     download.searchParams.set("resourcekey", resourceKey);
     view.searchParams.set("resourcekey", resourceKey);
   }
-  return { download: download.href, view: view.href };
+  return { provider: "drive", download: download.href, view: view.href };
+}
+
+export async function fetchReleaseDownloadCounts(mods) {
+  const repos = new Set();
+  for (const mod of mods) {
+    if (mod.driveLinks?.provider === "github") {
+      repos.add(`${mod.driveLinks.owner}/${mod.driveLinks.repo}`);
+    }
+  }
+  if (!repos.size) repos.add("godmian-hon/godmian-hon.github.io");
+
+  const assetCounts = new Map();
+  const tagCounts = new Map();
+  const slugPrefixCounts = new Map();
+
+  await Promise.allSettled([...repos].map(async repoPath => {
+    const res = await fetch(`https://api.github.com/repos/${repoPath}/releases?per_page=100`, {
+      headers: { Accept: "application/vnd.github+json" },
+    });
+    if (!res.ok) return;
+    const releases = await res.json();
+    if (!Array.isArray(releases)) return;
+    for (const rel of releases) {
+      const tag = text(rel.tag_name);
+      let relTotal = 0;
+      if (Array.isArray(rel.assets)) {
+        for (const asset of rel.assets) {
+          const count = Number(asset.download_count) || 0;
+          relTotal += count;
+          if (asset.browser_download_url) assetCounts.set(asset.browser_download_url, count);
+          if (asset.name) assetCounts.set(asset.name.toLowerCase(), (assetCounts.get(asset.name.toLowerCase()) || 0) + count);
+        }
+      }
+      if (tag) {
+        tagCounts.set(tag.toLowerCase(), relTotal);
+        const prefix = tag.toLowerCase().split("-v")[0];
+        if (prefix) slugPrefixCounts.set(prefix, (slugPrefixCounts.get(prefix) || 0) + relTotal);
+      }
+    }
+  }));
+
+  for (const mod of mods) {
+    let total;
+    const slugPrefix = mod.slug.split("-")[0].toLowerCase();
+    if (slugPrefixCounts.has(mod.slug.toLowerCase())) {
+      total = slugPrefixCounts.get(mod.slug.toLowerCase());
+    } else if (slugPrefixCounts.has(slugPrefix)) {
+      total = slugPrefixCounts.get(slugPrefix);
+    } else if (mod.driveLinks?.provider === "github") {
+      const { download, filename, tag } = mod.driveLinks;
+      if (assetCounts.has(download)) total = assetCounts.get(download);
+      else if (filename && assetCounts.has(filename.toLowerCase())) total = assetCounts.get(filename.toLowerCase());
+      else if (tag && tagCounts.has(tag.toLowerCase())) total = tagCounts.get(tag.toLowerCase());
+      else total = 0;
+    }
+    if (typeof total === "number") {
+      mod.downloadCount = total;
+    }
+  }
+  return mods;
+}
+
+export function updateDownloadCountBadges(mods) {
+  for (const mod of mods) {
+    if (typeof mod.downloadCount !== "number") continue;
+    const formatted = mod.downloadCount.toLocaleString("th-TH");
+    document.querySelectorAll(`[data-download-slug="${mod.slug}"]`).forEach(node => {
+      const numNode = node.querySelector(".download-count-value") || node;
+      numNode.textContent = formatted + " ครั้ง";
+      node.hidden = false;
+    });
+  }
 }
 
 export function skillClipPath(value) {
   const links = getDriveLinks(value);
-  if (!links) return videoPath(value);
+  if (!links || links.provider !== "drive") return videoPath(value);
   const id = new URL(links.download).searchParams.get("id");
   return "./assets/video/drive-" + id + ".mp4";
 }

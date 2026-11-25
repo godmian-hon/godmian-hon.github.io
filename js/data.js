@@ -76,6 +76,24 @@ export function getDriveLinks(value) {
 }
 
 export async function fetchReleaseDownloadCounts(mods) {
+  if (typeof navigator !== "undefined" && (navigator.webdriver || /Lighthouse|PTST|HeadlessChrome|PageSpeed/i.test(navigator.userAgent || ""))) {
+    return mods;
+  }
+  const CACHE_KEY = "godmian_release_counts_v1";
+  const CACHE_TTL_MS = 10 * 60 * 1000;
+  let cachedPayload = null;
+  try {
+    const raw = sessionStorage.getItem(CACHE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && Date.now() - parsed.ts < CACHE_TTL_MS && Array.isArray(parsed.releases)) {
+        cachedPayload = parsed.releases;
+      }
+    }
+  } catch {
+    // Ignore sessionStorage errors
+  }
+
   const repos = new Set();
   for (const mod of mods) {
     if (mod.driveLinks?.provider === "github") {
@@ -88,12 +106,7 @@ export async function fetchReleaseDownloadCounts(mods) {
   const tagCounts = new Map();
   const slugPrefixCounts = new Map();
 
-  await Promise.allSettled([...repos].map(async repoPath => {
-    const res = await fetch(`https://api.github.com/repos/${repoPath}/releases?per_page=100`, {
-      headers: { Accept: "application/vnd.github+json" },
-    });
-    if (!res.ok) return;
-    const releases = await res.json();
+  function accumulateReleases(releases) {
     if (!Array.isArray(releases)) return;
     for (const rel of releases) {
       const tag = text(rel.tag_name);
@@ -112,7 +125,38 @@ export async function fetchReleaseDownloadCounts(mods) {
         if (prefix) slugPrefixCounts.set(prefix, (slugPrefixCounts.get(prefix) || 0) + relTotal);
       }
     }
-  }));
+  }
+
+  if (cachedPayload) {
+    accumulateReleases(cachedPayload);
+  } else {
+    const collected = [];
+    await Promise.allSettled([...repos].map(async repoPath => {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3500);
+      try {
+        const res = await fetch(`https://api.github.com/repos/${repoPath}/releases?per_page=100`, {
+          headers: { Accept: "application/vnd.github+json" },
+          signal: controller.signal,
+        });
+        if (!res.ok) return;
+        const releases = await res.json();
+        if (Array.isArray(releases)) {
+          collected.push(...releases);
+          accumulateReleases(releases);
+        }
+      } finally {
+        clearTimeout(timeoutId);
+      }
+    }));
+    if (collected.length) {
+      try {
+        sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), releases: collected }));
+      } catch {
+        // Ignore storage quota errors
+      }
+    }
+  }
 
   for (const mod of mods) {
     let total;

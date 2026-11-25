@@ -57,8 +57,6 @@ export function initializeCollection(mods, failed = false) {
       shownPreview = single;
       previewStrip.replaceChildren();
       if (single) {
-        const cover = cards.get(single).querySelector('.card-visual img');
-        if (cover.getAttribute('src') === single.thumbnail && single.heroImage !== single.thumbnail) cover.src = single.heroImage;
         single.screenshots.forEach((src, index) => {
           if (src !== single.heroImage && previewStrip.childElementCount < 3) previewStrip.append(imageButton(single, index));
         });

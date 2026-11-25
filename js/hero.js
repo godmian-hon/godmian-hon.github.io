@@ -56,7 +56,7 @@ export function initializeHero(mods) {
 
   function slideImage(mod) {
     return makeImage(mod.heroImage || mod.thumbnail, mod.artworkAlt || mod.name, {
-      eager: true, width: 1920, height: 840, className: 'spotlight-art'
+      eager: true, width: 1440, height: 617, className: 'spotlight-art'
     });
   }
 
@@ -65,10 +65,16 @@ export function initializeHero(mods) {
     const direction = position >= index ? 1 : -1;
     index = (position + slides.length) % slides.length;
     const mod = slides[index];
-    const img = prepared.get(mod) || slideImage(mod);
-    prepared.delete(mod);
-    img.fetchPriority = 'high';
-    switchImage(img, direction);
+    const existing = stage.firstElementChild;
+    const targetSrc = mod.heroImage || mod.thumbnail;
+    if (existing && stage.childElementCount === 1 && existing.getAttribute('src') === targetSrc) {
+      existing.fetchPriority = 'high';
+    } else {
+      const img = prepared.get(mod) || slideImage(mod);
+      prepared.delete(mod);
+      img.fetchPriority = 'high';
+      switchImage(img, direction);
+    }
     const neighbors = new Set([slides[(index + 1) % slides.length], slides[(index + slides.length - 1) % slides.length]]);
     for (const cached of prepared.keys()) {
       if (!neighbors.has(cached)) prepared.delete(cached);

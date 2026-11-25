@@ -233,7 +233,13 @@ try {
 }
 dataReady = true;
 renderRoute(true);
-fetchReleaseDownloadCounts(mods).then(() => updateDownloadCountBadges(mods)).catch(() => {});
+const scheduleReleaseCountFetch = () => {
+  const run = () => fetchReleaseDownloadCounts(mods).then(() => updateDownloadCountBadges(mods)).catch(() => {});
+  if ('requestIdleCallback' in window) requestIdleCallback(run, { timeout: 2500 });
+  else setTimeout(run, 1200);
+};
+if (document.readyState === 'complete') scheduleReleaseCountFetch();
+else window.addEventListener('load', scheduleReleaseCountFetch, { once: true });
 
 window.addEventListener('popstate', () => {
   transitionToRoute(true);

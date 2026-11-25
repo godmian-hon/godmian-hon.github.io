@@ -343,7 +343,7 @@ export function renderDetail(mod, container) {
   back.dataset.route = "explore";
   back.prepend(icon("left"));
   const header = element("div", "detail-header");
-  const cover = makeImage(mod.heroImage, mod.artworkAlt, { eager: true, className: "detail-cover", width: 1280, height: 720 });
+  const cover = makeImage(mod.heroImage, mod.artworkAlt, { eager: true, className: "detail-cover", width: 1440, height: 617 });
   const syncThemeFromCover = () => {
     if (token !== activeThemeToken || !cover.naturalWidth) return;
     const palette = extractPaletteFromImage(cover, mod.accent);
@@ -376,7 +376,7 @@ export function renderDetail(mod, container) {
       trigger.type = "button";
       trigger.setAttribute("aria-label", title);
       trigger.dataset.title = title;
-      trigger.append(makeImage(skill.icon, "", { width: 100, height: 100 }));
+      trigger.append(makeImage(skill.icon, title || skill.name || "ไอคอนสกิล", { width: 100, height: 100 }));
       card.append(trigger);
       trigger.dataset.video = skill.clip;
       trigger.dataset.desc = skill.description;

@@ -80,7 +80,7 @@ export function initializeVideoPreview() {
   document.addEventListener('pointerout', event => {
     if (active && !active.contains(event.relatedTarget)) hide();
   });
-  for (const event of ['resize', 'blur', 'hashchange', 'pagehide']) window.addEventListener(event, hide);
+  for (const event of ['resize', 'blur', 'hashchange', 'popstate', 'pagehide']) window.addEventListener(event, hide);
   window.addEventListener('scroll', () => {
     if (active && !active.contains(document.elementFromPoint(pointerX, pointerY))) hide();
   }, { passive: true });

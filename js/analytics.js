@@ -23,7 +23,7 @@ export function modParams(mod) {
   };
 }
 
-export function trackPageView(pagePath = location.pathname + location.hash, pageTitle = document.title) {
+export function trackPageView(pagePath = location.pathname + location.search, pageTitle = document.title) {
   trackEvent('page_view', {
     page_title: pageTitle,
     page_location: location.href,
@@ -34,7 +34,7 @@ export function trackPageView(pagePath = location.pathname + location.hash, page
 export function trackModView(mod) {
   if (!mod) return;
   trackEvent('mod_view', modParams(mod));
-  trackPageView(location.pathname + '#mod/' + mod.slug, mod.name + ' — GodMian');
+  trackPageView(location.pathname + '?mod=' + encodeURIComponent(mod.slug), mod.name + ' — GodMian');
 }
 
 export function trackModDownload(mod) {

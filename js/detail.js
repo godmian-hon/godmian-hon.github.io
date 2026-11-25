@@ -12,11 +12,154 @@ const SHARED_INSTALL_STEPS = [
 
 let openDialog = null;
 let stopReveal;
+let activeThemeToken = 0;
+const paletteCache = new Map();
+
+function rgbToHsl(r, g, b) {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h = 0;
+  let s = 0;
+  const l = (max + min) / 2;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h *= 60;
+  }
+  return [h, s, l];
+}
+
+function hexToHsl(hex) {
+  const clean = String(hex || "").replace("#", "").trim();
+  if (!/^[0-9a-fA-F]{6}$/.test(clean)) return [275, 0.85, 0.58];
+  const num = parseInt(clean, 16);
+  return rgbToHsl((num >> 16) & 255, (num >> 8) & 255, num & 255);
+}
+
+function buildPaletteFromHsl(h, s, l) {
+  const hue = Math.round(((h % 360) + 360) % 360);
+  const sat = Math.round(Math.max(72, Math.min(96, s * 100 + 12)));
+  const brightSat = Math.round(Math.max(80, Math.min(100, s * 100 + 18)));
+  const baseLight = Math.round(Math.max(56, Math.min(66, l * 100)));
+  // Keep button background rich enough for crisp white text across all hues
+  const isBrightHue = hue >= 42 && hue <= 195;
+  const strongLight = isBrightHue ? 38 : 46;
+  const deepLight = isBrightHue ? 27 : 34;
+  const deepHue = (hue + 8) % 360;
+
+  return {
+    color: `hsl(${hue} ${sat}% ${baseLight}%)`,
+    bright: `hsl(${hue} ${brightSat}% 75%)`,
+    strong: `hsl(${hue} ${sat}% ${strongLight}%)`,
+    deep: `hsl(${deepHue} ${sat}% ${deepLight}%)`,
+  };
+}
+
+function extractPaletteFromImage(img, fallbackHex) {
+  const key = img.currentSrc || img.src;
+  if (key && paletteCache.has(key)) return paletteCache.get(key);
+  try {
+    const size = 64;
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(img, 0, 0, size, size);
+    const { data } = ctx.getImageData(0, 0, size, size);
+
+    const BIN_COUNT = 24;
+    const weights = new Float64Array(BIN_COUNT);
+    const sinSum = new Float64Array(BIN_COUNT);
+    const cosSum = new Float64Array(BIN_COUNT);
+    const satSum = new Float64Array(BIN_COUNT);
+    const lightSum = new Float64Array(BIN_COUNT);
+
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i + 3] < 128) continue;
+      const [h, s, l] = rgbToHsl(data[i], data[i + 1], data[i + 2]);
+      if (l < 0.15 || l > 0.88 || s < 0.2) continue;
+
+      const pixelIndex = i / 4;
+      const px = (pixelIndex % size) / size;
+      const py = Math.floor(pixelIndex / size) / size;
+      const centerDist = Math.hypot(px - 0.5, py - 0.5);
+      const centerBoost = 1.15 - Math.min(0.45, centerDist * 0.65);
+
+      // Mildly discount desaturated warm skin tones so vibrant effects/armor/auras win
+      const skinPenalty = (h >= 16 && h <= 42 && s < 0.66) ? 0.38 : 1.0;
+      const vibrancy = Math.pow(s, 1.75) * (1 - Math.abs(l - 0.52) * 1.1);
+      const w = vibrancy * centerBoost * skinPenalty;
+      if (w <= 0) continue;
+
+      const bin = Math.floor((h / 360) * BIN_COUNT) % BIN_COUNT;
+      const rad = (h * Math.PI) / 180;
+      weights[bin] += w;
+      sinSum[bin] += Math.sin(rad) * w;
+      cosSum[bin] += Math.cos(rad) * w;
+      satSum[bin] += s * w;
+      lightSum[bin] += l * w;
+    }
+
+    let bestBin = -1;
+    let bestScore = 0;
+    for (let b = 0; b < BIN_COUNT; b++) {
+      const prev = (b + BIN_COUNT - 1) % BIN_COUNT;
+      const next = (b + 1) % BIN_COUNT;
+      const score = weights[b] + 0.28 * (weights[prev] + weights[next]);
+      if (score > bestScore && weights[b] > 0) {
+        bestScore = score;
+        bestBin = b;
+      }
+    }
+
+    if (bestBin !== -1) {
+      const w = weights[bestBin];
+      let avgHue = (Math.atan2(sinSum[bestBin] / w, cosSum[bestBin] / w) * 180) / Math.PI;
+      if (avgHue < 0) avgHue += 360;
+      const avgSat = satSum[bestBin] / w;
+      const avgLight = lightSum[bestBin] / w;
+      const palette = buildPaletteFromHsl(avgHue, avgSat, avgLight);
+      if (key) paletteCache.set(key, palette);
+      return palette;
+    }
+  } catch {
+    // Fallback if canvas extraction fails
+  }
+  const [fh, fs, fl] = hexToHsl(fallbackHex);
+  return buildPaletteFromHsl(fh, fs, fl);
+}
+
+function applyScenePalette(article, palette) {
+  const root = document.documentElement;
+  root.classList.add("detail-theme-active");
+  for (const target of [article, root]) {
+    if (!target) continue;
+    target.style.setProperty("--scene-color", palette.color);
+    target.style.setProperty("--scene-bright", palette.bright);
+    target.style.setProperty("--scene-strong", palette.strong);
+    target.style.setProperty("--scene-deep", palette.deep);
+  }
+}
 
 export function leaveDetail() {
+  activeThemeToken += 1;
   closeLightbox();
   stopReveal?.();
   stopReveal = null;
+  const root = document.documentElement;
+  root.classList.remove("detail-theme-active");
+  root.style.removeProperty("--scene-color");
+  root.style.removeProperty("--scene-bright");
+  root.style.removeProperty("--scene-strong");
+  root.style.removeProperty("--scene-deep");
 }
 
 function control(label, glyph, className = "detail-icon-btn") {
@@ -190,13 +333,27 @@ function videoPlayer(source, title) {
 
 export function renderDetail(mod, container) {
   closeLightbox();
+  const token = ++activeThemeToken;
   const article = element("article", "wrap detail-layout");
-  article.style.setProperty("--scene-color", mod.accent);
+  const [fh, fs, fl] = hexToHsl(mod.accent);
+  applyScenePalette(article, buildPaletteFromHsl(fh, fs, fl));
+
   const back = element("a", "detail-back", "Back to collection");
-  back.href = "#explore";
+  back.href = "./";
+  back.dataset.route = "explore";
   back.prepend(icon("left"));
   const header = element("div", "detail-header");
   const cover = makeImage(mod.heroImage, mod.artworkAlt, { eager: true, className: "detail-cover", width: 1280, height: 720 });
+  const syncThemeFromCover = () => {
+    if (token !== activeThemeToken || !cover.naturalWidth) return;
+    const palette = extractPaletteFromImage(cover, mod.accent);
+    applyScenePalette(article, palette);
+  };
+  if (cover.complete && cover.naturalWidth) {
+    syncThemeFromCover();
+  } else {
+    cover.addEventListener("load", syncThemeFromCover, { once: true });
+  }
   header.append(cover, summary(mod));
   article.append(back, header);
   if (mod.longDescription) {

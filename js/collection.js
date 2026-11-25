@@ -8,7 +8,11 @@ export function initializeCollection(mods, failed = false) {
   const editorial = picks;
   featured.hidden = !editorial.length;
   document.getElementById('feature-grid').replaceChildren(...editorial.map(mod => modCard(mod, true)));
-  if (featured.hidden) document.querySelector('.scroll-cue').href = '#explore';
+  if (featured.hidden) {
+    const cue = document.querySelector('.scroll-cue');
+    cue.href = './';
+    cue.dataset.route = 'explore';
+  }
 
   const field = document.getElementById('mod-search');
   const category = document.getElementById('category-filter');

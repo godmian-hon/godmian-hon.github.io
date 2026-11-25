@@ -11,7 +11,8 @@ export function setMenu(open) {
 
 export function setCurrent(section) {
   nav.querySelectorAll('a').forEach(link => {
-    if (link.hash === '#' + section) link.setAttribute('aria-current', 'page');
+    const route = link.dataset.route || link.hash.slice(1);
+    if (route === section) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   });
 }

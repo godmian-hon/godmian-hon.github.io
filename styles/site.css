@@ -17,6 +17,30 @@
   color: var(--text);
   font-synthesis: none;
 }
+:root.detail-theme-active {
+  --pop: var(--scene-color, #b52bff);
+  --pop-bright: var(--scene-bright, #cf63ff);
+}
+:root.detail-theme-active .primary-nav a[aria-current]::after {
+  background: var(--scene-color, var(--pop));
+  box-shadow: 0 0 12px color-mix(in srgb, var(--scene-color, #b52bff) 80%, transparent);
+}
+:root.detail-theme-active .search-shortcut:hover {
+  border-color: var(--scene-bright, var(--pop-bright));
+  box-shadow: 0 0 12px color-mix(in srgb, var(--scene-color, #b52bff) 35%, transparent);
+}
+:root.detail-theme-active .search-shortcut kbd {
+  border-color: color-mix(in srgb, var(--scene-color, #b52bff) 48%, transparent);
+  color: var(--scene-bright, #e2a8ff);
+}
+:root.detail-theme-active .cursor-preview {
+  border-color: var(--scene-bright, var(--pop-bright));
+  background: linear-gradient(135deg, #12151e, color-mix(in srgb, var(--scene-deep, #1a1128) 38%, #12151e));
+  box-shadow: 0 10px 32px #000b, 0 0 18px color-mix(in srgb, var(--scene-color, #b52bff) 34%, transparent);
+}
+:root.detail-theme-active .cursor-preview strong:not([hidden]) {
+  color: var(--scene-bright, #df8fff);
+}
 * { box-sizing: border-box; }
 body { margin: 0; line-height: 1.55; -webkit-font-smoothing: antialiased; }
 button, input, select { font: inherit; }

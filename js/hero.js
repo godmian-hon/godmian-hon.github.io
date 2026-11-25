@@ -83,7 +83,9 @@ export function initializeHero(mods) {
     hero.style.setProperty('--scene-color', mod.accent);
     drift();
     modName.textContent = mod.name;
-    modName.href = spotlightLink.href = '#mod/' + mod.slug;
+    modName.href = spotlightLink.href = './?mod=' + encodeURIComponent(mod.slug);
+    modName.dataset.modSlug = spotlightLink.dataset.modSlug = mod.slug;
+     delete spotlightLink.dataset.route;
     label.textContent = mod.concept ? 'Spotlight / ภาพคอนเซปต์' : 'In the spotlight';
     counter.textContent = String(index + 1).padStart(2, '0');
     animate(modName.parentElement, [

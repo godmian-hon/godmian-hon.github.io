@@ -51,7 +51,8 @@ export function modCard(mod, isEditorial = false) {
   }
   article.style.setProperty('--scene-color', mod.accent);
   const link = element('a', 'card-link');
-  link.href = '#mod/' + mod.slug;
+  link.href = './?mod=' + encodeURIComponent(mod.slug);
+  link.dataset.modSlug = mod.slug;
   link.setAttribute('aria-label', 'ดูรายละเอียด ' + mod.name);
   const visual = element('div', 'card-visual');
   visual.style.setProperty('--scene-color', mod.accent);

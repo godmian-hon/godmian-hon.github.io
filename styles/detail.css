@@ -191,9 +191,11 @@ button.skill-card:hover, button.skill-card[aria-expanded="true"] {
 }
 .install-video-wrap {
   margin-top: 1.15rem;
+  user-select: none;
 }
 .install-video-wrap .mod-video {
   width: 100%;
   aspect-ratio: 16 / 9;
   border-color: color-mix(in srgb, var(--scene-color, #cf63ff) 38%, transparent);
+  pointer-events: none;
 }

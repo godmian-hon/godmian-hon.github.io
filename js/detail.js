@@ -477,8 +477,28 @@ export function renderDetail(mod, container) {
   installation.append(launcherBox, textList(SHARED_INSTALL_STEPS, "ol"));
   const guideVideoWrap = element("div", "install-video-wrap");
   const guideVideo = videoPlayer(INSTALL_GUIDE_VIDEO, "วิดีโอสอนวิธีติดตั้งม็อดด้วย Newerth Forge");
+  guideVideo.controls = false;
+  guideVideo.removeAttribute("controls");
   guideVideo.loop = true;
-  guideVideo.controls = true;
+  guideVideo.defaultMuted = true;
+  guideVideo.muted = true;
+  guideVideo.volume = 0;
+  guideVideo.tabIndex = -1;
+  guideVideo.disablePictureInPicture = true;
+  guideVideo.disableRemotePlayback = true;
+  guideVideo.setAttribute("controlslist", "nodownload nofullscreen noremoteplayback noplaybackrate");
+  guideVideo.addEventListener("volumechange", () => {
+    if (!guideVideo.muted || guideVideo.volume !== 0) {
+      guideVideo.muted = true;
+      guideVideo.volume = 0;
+    }
+  });
+  guideVideo.addEventListener("pause", () => {
+    if (guideVideo.isConnected && !document.hidden) {
+      guideVideo.play().catch(() => {});
+    }
+  });
+  guideVideoWrap.addEventListener("contextmenu", event => event.preventDefault());
   guideVideoWrap.append(guideVideo);
   installation.append(guideVideoWrap);
   const history = textSection("ประวัติการอัปเดต");
